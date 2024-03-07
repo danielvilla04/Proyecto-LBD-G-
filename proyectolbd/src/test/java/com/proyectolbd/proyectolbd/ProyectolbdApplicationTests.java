@@ -1,10 +1,10 @@
-package com.lbdproject.lbd_project;
+package com.proyectolbd.proyectolbd;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LbdProjectApplicationTests {
+class ProyectolbdApplicationTests {
 
 	@Test
 	void contextLoads() {

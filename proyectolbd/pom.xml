@@ -8,10 +8,10 @@
 		<version>3.2.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.lbdproject</groupId>
-	<artifactId>lbd_project</artifactId>
+	<groupId>com.proyectolbd</groupId>
+	<artifactId>proyectolbd</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lbd_project</name>
+	<name>proyectolbd</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>

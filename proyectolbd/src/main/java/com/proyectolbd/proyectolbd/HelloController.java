@@ -1,5 +1,4 @@
-package com.lbdproject.lbd_project;
-
+package com.proyectolbd.proyectolbd;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

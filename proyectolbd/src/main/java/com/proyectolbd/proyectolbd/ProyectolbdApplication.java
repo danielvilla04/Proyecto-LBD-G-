@@ -1,13 +1,13 @@
-package com.lbdproject.lbd_project;
+package com.proyectolbd.proyectolbd;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LbdProjectApplication {
+public class ProyectolbdApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LbdProjectApplication.class, args);
+		SpringApplication.run(ProyectolbdApplication.class, args);
 	}
 
 }
