@@ -191,26 +191,27 @@ EXECUTE INSERTAR_FACTURA(1,1,1,1,'direccion','25-MAR-2024','25-MAR-2024',8000);
 --Funcion para eliminar una factura
 CREATE OR REPLACE PROCEDURE ELIMINAR_FACTURA(id_factura FACTURA_TB.ID_FACTURA%TYPE)
 AS
-    validar BOOLEAN;
     cantidad NUMBER;
-
 BEGIN
     SELECT COUNT(*) INTO cantidad
     FROM FACTURA_TB
     WHERE ID_FACTURA = id_factura;
     --Validar la existencia de un registro con el id
-    IF cantidad > 0 THEN
-        validar := TRUE;
-    ELSE
-        validar := FALSE;
-    END IF;
     
     --SI EXISTE UNN REGISTRO REALIZAR EL BORRADO
-    IF validar = TRUE THEN
+    IF cantidad>0 THEN
+        DELETE FROM DETALLE_FACTURA_TB
+        WHERE id_factura = id_factura;
+
+        -- Eliminar la factura
         DELETE FROM FACTURA_TB
-        WHERE ID_FACTURA= id_factura;
+        WHERE ID_FACTURA = id_factura;
+
+        -- Realizar un commit para hacer permanentes los cambios
         COMMIT;
-        DBMS_OUTPUT.PUT_LINE('Registro eliminado correctamente');
+        
+        -- Mensaje de éxito
+        DBMS_OUTPUT.PUT_LINE('Factura eliminada correctamente');
     ELSE
         DBMS_OUTPUT.PUT_LINE('No se encontraron datos');
     END IF;
@@ -221,5 +222,68 @@ EXECUTE ELIMINAR_FACTURA(1);
 
 --Procedimiento para insertar un detalle de factura
 
+CREATE OR REPLACE PROCEDURE INSERTAR_DETALLE_FACTURA(
+    id_detalle_factura DETALLE_FACTURA_TB.ID_DETALLE_FACTURA%TYPE,
+    id_factura DETALLE_FACTURA_TB.ID_FACTURA%TYPE,
+    id_producto DETALLE_FACTURA_TB.ID_PRODUCTO%TYPE,
+    cantidad_producto DETALLE_FACTURA_TB.CANTIDAD_PRODUCTOS%TYPE,
+    precio_fila DETALLE_FACTURA_TB.PRECIO_FILA%TYPE
+)     
+AS
+    validar BOOLEAN;
+    cantidad NUMBER;
 
+BEGIN
+    
+    SELECT COUNT(*) INTO cantidad
+    FROM DETALLE_FACTURA_TB
+    WHERE ID_DETALLE_FACTURA = id_detalle_factura;
+    
+    --Validar la existencia de un registro con el id
+    IF cantidad > 0 THEN
+        validar := TRUE;
+    ELSE
+        validar := FALSE;
+    END IF;
+    
+    --Si el registro no existe se inserta uno nuevo
+    IF validar = FALSE THEN
+        INSERT INTO DETALLE_FACTURA_TB(ID_DETALLE_FACTURA, ID_FACTURA, ID_PRODUCTO, CANTIDAD_PRODUCTOS, PRECIO_FILA)
+        VALUES(id_detalle_factura, id_factura,id_producto ,cantidad_producto,precio_fila);
+        COMMIT;
+
+    END IF;
+
+EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+        DBMS_OUTPUT.PUT_LINE('No se encontraron datos');
+END;
+
+
+EXECUTE INSERTAR_DETALLE_FACTURA(1,1,1,5,25000);
+
+
+--PROCEDIMIENTOS PARA EL APARTADO DE HISTORIAL DE VENTAS
+
+--PROCEDIMEINTO PARA INSERTAR LOS HISTORICOS DE VENTAS
+CREATE OR REPLACE PROCEDURE CREAR_VENTA(
+    id_factura IN historial_ventas.id_factura%TYPE,
+    fecha_venta IN historial_ventas.fecha_venta%TYPE,
+    total_venta IN historial_ventas.total_venta%TYPE
+) AS
+BEGIN
+    INSERT INTO historial_ventas (id_factura, fecha_venta, total_venta)
+    VALUES (id_factura, fecha_venta, total_venta);
+    COMMIT;
+END;
+
+--PROCEDIMIENTO PARA BORRAR UN HISTORIAL DE VENTA
+CREATE OR REPLACE PROCEDURE ELIMINAR_VENTA(
+    id_venta IN historial_ventas.id_venta%TYPE
+) AS
+BEGIN
+    DELETE FROM historial_ventas
+    WHERE id_venta = id_venta;
+    COMMIT;
+END;
 
