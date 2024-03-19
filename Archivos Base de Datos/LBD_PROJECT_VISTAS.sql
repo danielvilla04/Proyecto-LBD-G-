@@ -1,61 +1,97 @@
--- Archivo para crear las funciones que trajarán dentro de la DB
+-- Archivo para crear las VISTAS que trajarán dentro de la DB
+
+--Vistas para el apartado de facturacion
+--vista de tabla facturas
+CREATE OR REPLACE VIEW v_facturas AS
+SELECT id_factura, id_cliente, id_empleado, id_metodo_pago, fecha_facturacion, fecha_impresion, total
+FROM factura_tb;
+
+--vista de tabla detalle factura
+CREATE OR REPLACE VIEW v_detalles_factura AS
+SELECT df.id_factura, df.id_producto, df.cantidad_productos, p.precio, df.PRECIO_FILA
+FROM detalle_factura_tb df
+INNER JOIN PRODUCTO_TB p ON df.id_producto = p.id_producto ;
+
+
+--vista de tabla de historial de ventas
+CREATE OR REPLACE VIEW vista_historial_ventas AS
+SELECT hv.id_venta, f.id_cliente, hv.fecha_venta, hv.total_venta
+FROM historial_ventas hv
+INNER JOIN FACTURA_TB f ON hv.id_factura = f.id_factura;
+
+
+--vista de metodo de pago
+CREATE OR REPLACE VIEW vista_metodos_pago AS
+SELECT id_metodo_pago, tipo_metodo_pago, detalles
+FROM metodo_pago_tb;
 
 
 
---FUNCIONES PARA EL APARTADO DE fACTURACION
-
---obtener desde factura
-CREATE OR REPLACE FUNCTION obtener_factura(
-    id_factura IN factura_tb.id_factura%TYPE
-) RETURN factura_tb%ROWTYPE IS
-    factura factura_tb%ROWTYPE;
-BEGIN
-    SELECT * INTO factura
-    FROM factura_tb
-    WHERE id_factura = id_factura;
-    RETURN factura;
-END obtener_factura; 
-
---obtener factura y detalles factura
-CREATE OR REPLACE FUNCTION obtener_factura_detalles(v_id_factura IN FACTURA_TB.id_factura%TYPE)
-RETURN SYS_REFCURSOR
-IS
-    f_cursor SYS_REFCURSOR;
-BEGIN
-    OPEN f_cursor FOR
-    SELECT f.id_factura as factura_id, f.id_cliente as cliente_id, f.id_empleado as empleado_id, f.id_metodo_pago as metodo_pago, f.detalles as detalles, f.fecha_facturacion as fecha_facturacion, f.fecha_impresion as fecha_impresion, f.total as total,
-           df.id_detalle_factura as detalle_factura_id,  df.id_producto as producto_id, df.cantidad_productos as cantidad_fila, df.precio_fila as precio_fila
-    FROM FACTURA_TB f
-    JOIN DETALLE_FACTURA_TB df ON f.id_factura = df.id_factura
-    WHERE f.id_factura = v_id_factura;
-
-    RETURN f_cursor;
-END obtener_factura_detalles;
+--VISTAS PARA PEDIDOS DE PRODUCTOS
+-- Vista sobre el detalle de pedidos
+CREATE OR REPLACE VIEW DETALLES_PEDIDOS_CLIENTES AS
+SELECT  
+    ID_PEDIDO_CLIENTE,
+    ID_FACTURA,
+    ID_DIRECCION,
+    ID_CLIENTE,
+    ESTADO_PEDIDO
+FROM 
+    PEDIDO_CLIENTE_TB;
 
 
---obtener desde historial_ventas
-CREATE OR REPLACE FUNCTION obtener_venta(
-    id_venta IN historial_ventas.id_venta%TYPE
-) RETURN historial_ventas%ROWTYPE IS
-    v_venta historial_ventas%ROWTYPE;
-BEGIN
-    SELECT * INTO v_venta
-    FROM historial_ventas
-    WHERE id_venta = id_venta;
-    RETURN v_venta;
-END obtener_venta; 
+-- Vistas resumen de los pedidos
+CREATE OR REPLACE VIEW RESUMEN_PEDIDOS_CLIENTES AS
+SELECT ID_CLIENTE, COUNT(ID_PEDIDO_CLIENTE) AS TOTAL_PEDIDOS, MAX(ESTADO_PEDIDO) AS ESTADO_ACTUAL
+FROM PEDIDO_CLIENTE_TB
+GROUP BY ID_CLIENTE;
+
+-- Vistas pedidos pendientes
+CREATE OR REPLACE VIEW PEDIDOS_PENDIENTES_VIEW AS
+SELECT 
+    ID_PEDIDO_CLIENTE,
+    ID_FACTURA,
+    ID_DIRECCION,
+    ID_CLIENTE,
+    ESTADO_PEDIDO,
+    'Total de Pedidos Pendientes' AS DESCRIPCION,
+    (SELECT COUNT(*) FROM PEDIDO_CLIENTE_TB WHERE ESTADO_PEDIDO = 'En espera') AS TOTAL_PEDIDOS_PENDIENTES
+FROM 
+    PEDIDO_CLIENTE_TB
+WHERE 
+    ESTADO_PEDIDO = 'En espera';
+
+-- Pedido por cliente
+CREATE OR REPLACE VIEW PEDIDOS_POR_CLIENTE AS
+SELECT ID_CLIENTE, COUNT(ID_PEDIDO_CLIENTE) AS TOTAL_PEDIDOS
+FROM PEDIDO_CLIENTE_TB
+GROUP BY ID_CLIENTE;
 
 
---FUNCIONES PARA EL APARTADO DE METODO DE PAGO
 
---obtener desde METODO DE PAGO
-CREATE OR REPLACE FUNCTION obtener_metodo_pago(
-    id_metodo_pago IN metodo_pago_tb.id_metodo_pago%TYPE
-) RETURN metodo_pago_tb%ROWTYPE IS
-    metodo_pago metodo_pago_tb%ROWTYPE;
-BEGIN
-    SELECT * INTO metodo_pago
-    FROM metodo_pago_tb
-    WHERE id_metodo_pago = id_metodo_pago;
-    RETURN  metodo_pago;
-END obtener_metodo_pago; 
+--vistas para productos
+CREATE OR REPLACE VIEW VISTA_INVENTARIO_CON_DESCRIPCION AS
+SELECT I.ID_INVENTARIO,
+       I.ID_PRODUCTO,
+       P.NOMBRE_PRODUCTO,
+       I.CANTIDAD_PRODUCTO,
+       I.FECHA_ACTUALIZACION,
+       I.DISPONIBLE
+FROM INVENTARIO_TB I
+JOIN PRODUCTO_TB P ON I.ID_PRODUCTO = P.ID_PRODUCTO;
+
+------Vista para mostrar los productos disponibles
+
+CREATE OR REPLACE VIEW VISTA_INVENTARIO_DISPONIBLE AS
+SELECT *
+FROM INVENTARIO_TB
+WHERE DISPONIBLE = 1;
+
+-----Vistas para mostrar las categorias activas
+CREATE OR REPLACE VIEW VISTA_CATEGORIAS_ACTIVAS AS
+SELECT *
+FROM CATEGORIA_PRODUCTOS_TB
+WHERE ACTIVO = 1;
+
+
+

@@ -35,6 +35,11 @@
     		<groupId>nz.net.ultraq.thymeleaf</groupId>
     		<artifactId>thymeleaf-layout-dialect</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
 
 	</dependencies>
 

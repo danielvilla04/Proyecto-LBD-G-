@@ -1,61 +1,56 @@
--- Archivo para crear las funciones que trajarán dentro de la DB
+-- Archivo para crear las vistas materializadas que trajarán dentro de la DB
 
 
 
---FUNCIONES PARA EL APARTADO DE fACTURACION
+--VISTAS MATERIALIZADAS PARA EL APARTADO DE fACTURACION
 
---obtener desde factura
-CREATE OR REPLACE FUNCTION obtener_factura(
-    id_factura IN factura_tb.id_factura%TYPE
-) RETURN factura_tb%ROWTYPE IS
-    factura factura_tb%ROWTYPE;
-BEGIN
-    SELECT * INTO factura
-    FROM factura_tb
-    WHERE id_factura = id_factura;
-    RETURN factura;
-END obtener_factura; 
-
---obtener factura y detalles factura
-CREATE OR REPLACE FUNCTION obtener_factura_detalles(v_id_factura IN FACTURA_TB.id_factura%TYPE)
-RETURN SYS_REFCURSOR
-IS
-    f_cursor SYS_REFCURSOR;
-BEGIN
-    OPEN f_cursor FOR
-    SELECT f.id_factura as factura_id, f.id_cliente as cliente_id, f.id_empleado as empleado_id, f.id_metodo_pago as metodo_pago, f.detalles as detalles, f.fecha_facturacion as fecha_facturacion, f.fecha_impresion as fecha_impresion, f.total as total,
-           df.id_detalle_factura as detalle_factura_id,  df.id_producto as producto_id, df.cantidad_productos as cantidad_fila, df.precio_fila as precio_fila
-    FROM FACTURA_TB f
-    JOIN DETALLE_FACTURA_TB df ON f.id_factura = df.id_factura
-    WHERE f.id_factura = v_id_factura;
-
-    RETURN f_cursor;
-END obtener_factura_detalles;
+-- Vista Materializada de Total de Ventas por Cliente
+CREATE MATERIALIZED VIEW vm_ventas_por_cliente AS
+SELECT f.id_cliente, COUNT(*) AS total_ventas
+FROM historial_ventas hv
+INNER JOIN factura_tb f ON hv.id_factura = f.id_factura 
+GROUP BY f.id_cliente;
 
 
---obtener desde historial_ventas
-CREATE OR REPLACE FUNCTION obtener_venta(
-    id_venta IN historial_ventas.id_venta%TYPE
-) RETURN historial_ventas%ROWTYPE IS
-    v_venta historial_ventas%ROWTYPE;
-BEGIN
-    SELECT * INTO v_venta
-    FROM historial_ventas
-    WHERE id_venta = id_venta;
-    RETURN v_venta;
-END obtener_venta; 
+--Vista Materializada de Facturas Pendientes:
+
+CREATE MATERIALIZED VIEW mv_facturas_pendientes AS
+SELECT id_factura, id_cliente, fecha_facturacion, total
+FROM factura_tb
+WHERE estado = 'pendiente';
 
 
---FUNCIONES PARA EL APARTADO DE METODO DE PAGO
+--Total de Ventas por Mes
+CREATE MATERIALIZED VIEW vm_ventas_por_mes AS
+SELECT TO_CHAR(fecha_facturacion, 'YYYY-MM') AS mes,
+       SUM(total) AS total_ventas
+FROM factura_tb
+GROUP BY TO_CHAR(fecha_facturacion, 'YYYY-MM');
 
---obtener desde METODO DE PAGO
-CREATE OR REPLACE FUNCTION obtener_metodo_pago(
-    id_metodo_pago IN metodo_pago_tb.id_metodo_pago%TYPE
-) RETURN metodo_pago_tb%ROWTYPE IS
-    metodo_pago metodo_pago_tb%ROWTYPE;
-BEGIN
-    SELECT * INTO metodo_pago
-    FROM metodo_pago_tb
-    WHERE id_metodo_pago = id_metodo_pago;
-    RETURN  metodo_pago;
-END obtener_metodo_pago; 
+--Productos Más Vendidos:
+
+CREATE MATERIALIZED VIEW mv_productos_mas_vendidos AS
+SELECT id_producto,
+       SUM(cantidad_productos) AS total_vendido
+FROM detalle_factura_tb
+GROUP BY id_producto
+ORDER BY SUM(cantidad_productos) DESC;
+
+
+--Clientes con Mayor Gasto:
+CREATE MATERIALIZED VIEW mv_clientes_mayor_gasto AS
+SELECT id_cliente,
+       SUM(total) AS total_gastado
+FROM factura_tb
+GROUP BY id_cliente
+ORDER BY SUM(total) DESC;
+
+
+--Resumen de Ventas por Empleado
+CREATE MATERIALIZED VIEW mv_ventas_por_empleado AS
+SELECT id_empleado,
+       COUNT(*) AS total_ventas,
+       SUM(total) AS total_ventas_valor
+FROM factura_tb
+GROUP BY id_empleado;
+
