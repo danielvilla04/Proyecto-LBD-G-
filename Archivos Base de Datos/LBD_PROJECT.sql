@@ -210,11 +210,16 @@ CREATE TABLE DETALLE_ORDEN_PROVEEDOR_TB(
 
 --------METODO PAGO
 CREATE TABLE METODO_PAGO_TB(
-    ID_METODO_PAGO NUMERIC NOT NULL PRIMARY KEY,
-    TIPO_METODO_PAGO VARCHAR(50) NOT NULL,
+    ID_METODO_PAGO NUMBER GENERATED ALWAYS AS IDENTITY(
+        START WITH 50  
+        INCREMENT BY 1
+    ),
+    NOMBRE_METODO_PAGO VARCHAR(50) NOT NULL,
     ACTIVO NUMBER(1,0) default 1,
     DETALLES VARCHAR2(100)
     );
+
+    
 
 /*Comentarios*/
 COMMENT ON COLUMN Metodo_Pago_tb.ID_METODO_PAGO IS 'Llave primaria de la tabla';
@@ -301,3 +306,19 @@ CREATE TABLE TRANSACCION_COMPRA(
 );
 
 
+
+
+
+CREATE TABLE ejemplo_tabla (
+    id NUMBER GENERATED ALWAYS AS IDENTITY(
+        START WITH 1000  -- Valor inicial específico
+        INCREMENT BY 1
+    ),
+    nombre VARCHAR2(50),
+    otro_campo VARCHAR2(50),
+    CONSTRAINT pk_ejemplo_tabla PRIMARY KEY (id)
+);
+
+drop table ejemplo_tabla
+INSERT INTO EJEMPLO_TABLA(nombre,otro_campo)
+VALUES('camilo','beto')
