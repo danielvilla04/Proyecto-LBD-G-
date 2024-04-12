@@ -6,7 +6,7 @@
 
 -- Vista Materializada de Total de Ventas por Cliente
 CREATE MATERIALIZED VIEW vm_ventas_por_cliente AS
-SELECT f.id_cliente, COUNT(*) AS total_ventas
+SELECT f.id_cliente, COUNT(*) AS total_ventas 
 FROM historial_ventas hv
 INNER JOIN factura_tb f ON hv.id_factura = f.id_factura 
 GROUP BY f.id_cliente;

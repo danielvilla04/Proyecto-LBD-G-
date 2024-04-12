@@ -5,9 +5,8 @@
 
 --Inserción de los metodos de pago
 SET SERVEROUTPUT ON;
-CREATE OR REPLACE PROCEDURE INSERTAR_METODOPAGO(
-    id_metodo METODO_PAGO_TB.ID_METODO_PAGO%TYPE,
-    tipo METODO_PAGO_TB.TIPO_METODO_PAGO%TYPE,
+create or replace  PROCEDURE INSERTAR_METODOPAGO(
+    nombre METODO_PAGO_TB.NOMBRE_METODO_PAGO%TYPE,
     detalles METODO_PAGO_TB.DETALLES%TYPE
 )     
 AS
@@ -15,25 +14,25 @@ AS
     cantidad NUMBER;
 
 BEGIN
-    
+
     SELECT COUNT(*) INTO cantidad
     FROM METODO_PAGO_TB
-    WHERE ID_METODO_PAGO = id_metodo;
+    WHERE NOMBRE_METODO_PAGO = nombre;
     --Validar la existencia de un registro con el id
     IF cantidad > 0 THEN
         validar := TRUE;
     ELSE
         validar := FALSE;
     END IF;
-    
+
     --Si el registro no existe se inserta uno nuevo
     IF validar = FALSE THEN
-        INSERT INTO METODO_PAGO_TB(ID_METODO_PAGO,TIPO_METODO_PAGO,DETALLES)
-        VALUES(id_metodo,tipo,detalles);
+        INSERT INTO METODO_PAGO_TB(NOMBRE_METODO_PAGO,DETALLES)
+        VALUES(nombre,detalles);
         COMMIT;
-        DBMS_OUTPUT.PUT_LINE('Se ha insertado correctamente un registro con el id : ' || id_metodo);
+        DBMS_OUTPUT.PUT_LINE('Se ha insertado correctamente un registro con el id ');
     ELSE
-        DBMS_OUTPUT.PUT_LINE('Ya existe un registro con el id : ' || id_metodo);
+        DBMS_OUTPUT.PUT_LINE('Ya existe un registro  ' );
     END IF;
 
 EXCEPTION
@@ -41,7 +40,7 @@ EXCEPTION
         DBMS_OUTPUT.PUT_LINE('No se encontraron datos');
 END;
 
-EXECUTE INSERTAR_METODOPAGO(2,'Efectivo','Pago con dólares')--Prueba de inserción
+EXECUTE INSERTAR_METODOPAGO('Efectivo','Pago con dólares')--Prueba de inserción
 
 --Procedimeinto para el Borrado de los métodos de pago
 

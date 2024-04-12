@@ -9,6 +9,10 @@
     <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/app.css}">
 
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
     <title>Document</title>
 </head>
 
@@ -17,25 +21,288 @@
     <div id="app"><!--Main Content-->
         <div th:replace="fragments/sidebar :: sidebar"></div>
         <div id="main"><!--Content-->
+
+
             <nav th:replace="fragments/header :: header"></nav>
             <div class="main-content container-fluid" th:fragment="contenido">
                 <!--layout:fragment="content"Dinamic Content-->
                 <div class="page-title">
                     <h3>Facturación</h3>
-                    <p class="text-subtitle text-muted">A good dashboard to display your statistics</p>
+                    <p class="text-subtitle text-muted">Crear nueva factura</p>
                 </div>
-                <section class="section">
+
+                <section class="content container-fluid">
+                    <form id="formFactura" method="post">
+                        <input type="hidden" id="detalleFactura" name="detalleFactura">
+                        <div class="row my-3 text-center">
+                            <div class="col-md-6 col-sm-12 p-0 ">
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white m-0">Cliente: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="selectCliente form-control w-85"
+                                            aria-label="Default select example" id="cliente" name="cliente">
+                                            <option selected>Seleccione el cliente</option>
+                                            <option value=1>One</option>
+                                            <option value=2>Two</option>
+                                            <option value=3>Three</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white m-0">Empleado: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="selectEmpleado form-select w-85"
+                                            aria-label="Default select example" id="empleado" name="empleado">
+                                            <option selected>Seleccione el empleado</option>
+                                            <option value=1>One</option>
+                                            <option value=2>Two</option>
+                                            <option value=3>Three</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white m-0">Metodo de Pago: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="selectMetodoPago form-select w-85"
+                                            aria-label="Default select example" name="metodo" id="metodo_pago">
+                                            <option selected>Seleccione el Metodo de Pago</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 col-sm-12 p-0 ">
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white">Fecha de Facturación: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  d-flex align-items-center">
+                                        <input class="form-control" type="date" id="fecha_facturacion"
+                                            name="fecha_facturacion">
+                                    </div>
+                                </div>
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary d-flex align-items-center">
+                                        <p class="text-white">Estado de Factura: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="form-select w-85" aria-label="Default select example" id="estado"
+                                            name="estado">
+                                            <option selected>Estado de la Factura</option>
+                                            <option value="Cancelada">Cancelada</option>
+                                            <option value="Pendiente">Pendiente</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary d-flex align-items-center">
+                                        <p class="text-white">Detalles: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  d-flex align-items-center">
+                                        <input class="form-control" type="text" id="detalles" name="detalles">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 p-0 mt-3 ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cantidad</th>
+                                            <th>Código Artículo</th>
+                                            <th>Descripcion</th>
+                                            <th>Precio Unitario</th>
+                                            <th>Precio de Fila</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detalleTabla">
+                                        <tr id="fila1">
+                                            <td class="px-2">
+                                                <input type="number" class="form-control w-50" id="cantidadProductos"
+                                                    name="cantidadProductos">
+                                            </td>
+                                            <td class="px-2">
+                                                <select class="selectProducto" style="width: 200px;" name="producto"
+                                                    id="producto">
+                                                    <option value=1>Cobertor de Motor</option>
+                                                    <option value=2>Parabrisas</option>
+                                                </select>
+                                            </td>
+                                            <td class="px-2">
+                                                <input type="text" class="form-control" name="descripcion"
+                                                    id="descripcion">
+                                            </td>
+                                            <td class="px-2">
+                                                <input type="number" class="form-control" name="precioFila"
+                                                    id="precioFila">
+                                            </td>
+                                            <td class="px-2">
+                                                <input type="number" class="form-control" name="totalFila"
+                                                    id="totalFila">
+                                            </td>
+                                            <td class="px-2">
+                                                <button class="btn w-10" id="btnQuitarFila">X</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-6 mt-3">
+                                <button class="btn btn-info" id="btnAgregarFila">+ Agregar Fila</button>
+                            </div>
+                            <div class="col-6 mt-3">
+                                <div class="row  my-2">
+                                    <div class="col-6 bg-primary text-white">Total: </div>
+                                    <div class="col-6 ">
+                                        <input type="number" id="total" name="total">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <hr class="p-0">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" id="btnCrearFactura" type="submit">Crear
+                                        Factura</button>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
 
                 </section>
+
             </div>
+
+
             <footer th:replace="fragments/footer :: footer"></footer>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script th:src="@{/js/feather.min.js}"></script>
     <script th:src="@{/js/app.js}"></script>
-    
+
     <script th:src="@{/js/main.js}"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.selectProducto').select2();
+            $('.selectCliente').select2();
+            $('.selectEmpleado').select2();
+            $('.selectMetodoPago').select2();
+
+
+            $.get("/obtener_metodos_pago", function (data) {
+                var options = '';
+                $.each(data, function (index, metodoPago) {
+                    options += '<option value="' + metodoPago.idMetodoPago + '">' + metodoPago.nombre + '</option>';
+                });
+                $('.selectMetodoPago').append(options);
+            });
+        });
+
+
+        //agregar filas con el boton
+        var contadorFilas = 1;
+
+        $('#btnAgregarFila').click(function () {
+            contadorFilas++;
+            var fila = '<tr id="fila' + contadorFilas + '">' +
+                '<td class="px-2"><input type="number" class="form-control w-50" id="cantidadProductos' + contadorFilas + '" name="cantidadProductos"></td>' +
+                '<td class="px-2"><select class="selectProducto" style="width: 200px;" name="producto' + contadorFilas + '" id="producto' + contadorFilas + '">' +
+                '<option value="1">Cobertor de Motor</option>' +
+                '<option value="2">Parabrisas</option>' +
+                '</select></td>' +
+                '<td class="px-2"><input type="text" class="form-control" name="descripcion' + contadorFilas + '" id="descripcion' + contadorFilas + '"></td>' +
+                '<td class="px-2"><input type="number" class="form-control" name="precioFila' + contadorFilas + '" id="precioFila' + contadorFilas + '"></td>' +
+                '<td class="px-2"><input type="number" class="form-control" name="totalFila' + contadorFilas + '" id="totalFila' + contadorFilas + '"></td>' +
+                '<td class="px-2"><button class="btn w-10 btnQuitarFila" id="btnQuitarFila">X</button></td>' +
+                '</tr>';
+            $('#detalleTabla').append(fila);
+            $('#producto' + contadorFilas).select2();
+        });
+
+        //quitar fila con boton
+        $(document).on('click', '#btnQuitarFila', function () {
+            $(this).closest('tr').remove();
+        });
+        $(document).on('input', 'input[name^="cantidadProductos"], input[name^="precioFila"]', function () {
+            // Calcula el precio total de cada fila
+            $('input[name^="totalFila"]').each(function () {
+                var cantidad = $(this).closest('tr').find('input[name^="cantidadProductos"]').val();
+                var precioUnitario = $(this).closest('tr').find('input[name^="precioFila"]').val();
+
+                // Calcula el precio total
+                var precioTotal = cantidad * precioUnitario;
+
+                // Actualiza el valor del campo de precio total
+                $(this).val(precioTotal);
+            });
+
+            // Calcula la suma de todos los totales de fila
+            var sumaTotal = 0;
+            $('input[name^="totalFila"]').each(function () {
+                var precioTotalFila = parseFloat($(this).val());
+                sumaTotal += isNaN(precioTotalFila) ? 0 : precioTotalFila;
+            });
+
+            // Actualiza el valor del campo de total
+            $('#total').val(sumaTotal);
+        });
+        //Crear factura
+        $('#formFactura').on('submit', function (event) {
+            event.preventDefault();
+            $('#btnCrearFactura').prop('disabled', true);
+            var detalles = [];
+            $('#detalleTabla tr').each(function () {
+                var detalle = {
+                    cantidad: $(this).find('input[name="cantidad"]').val(),
+                    producto: $(this).find('select[name="producto"]').val(),
+                    descripcion: $(this).find('input[name="descripcion"]').val(),
+                    precioUnitario: $(this).find('input[name="precioUnitario"]').val(),
+                    totalFila: $(this).find('input[name="totalFila"]').val()
+                };
+                detalles.push(detalle);
+            });
+            $('#detalleFactura').val(JSON.stringify(detalles));
+
+            var formData = new FormData($('#formFactura')[0]);
+            console.log(formData)
+            $.ajax({
+                url: '/crear_factura',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // Maneja la respuesta de acuerdo a tus necesidades
+                    console.log(response);
+                    $('#btnCrearFactura').removeAttr('disabled');
+                    $('#formFactura')[0].reset();
+                },
+                error: function (xhr, status, error) {
+                    // Maneja los errores de la solicitud
+                    console.error(error);
+                    $('#btnCrearFactura').removeAttr('disabled');
+                }
+            });
+        });
+
+    </script>
 
 </body>
 

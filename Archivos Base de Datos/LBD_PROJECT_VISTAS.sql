@@ -22,11 +22,10 @@ INNER JOIN FACTURA_TB f ON hv.id_factura = f.id_factura;
 
 --vista de metodo de pago
 CREATE OR REPLACE VIEW vista_metodos_pago AS
-SELECT id_metodo_pago, tipo_metodo_pago, detalles
+SELECT id_metodo_pago as id_metodo, nombre_metodo_pago as nombre,  detalles
 FROM metodo_pago_tb;
 
-
-
+SELECT * FROM vista_metodos_pago
 --VISTAS PARA PEDIDOS DE PRODUCTOS
 -- Vista sobre el detalle de pedidos
 CREATE OR REPLACE VIEW DETALLES_PEDIDOS_CLIENTES AS

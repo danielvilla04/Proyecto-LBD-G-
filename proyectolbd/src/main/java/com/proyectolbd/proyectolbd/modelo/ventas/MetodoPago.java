@@ -1,18 +1,33 @@
 package com.proyectolbd.proyectolbd.modelo.ventas;
 
+
+
 public class MetodoPago {
-    private int metodoPago;
+    private int idMetodoPago;
     private String nombre;
     private int activo;
     private String detalles;
+    
+    public MetodoPago(){
+
+    }
 
 
-    public int getMetodoPago() {
-        return metodoPago;
+    public MetodoPago(int idMetodoPago, String nombre, int activo, String detalles) {
+        this.idMetodoPago = idMetodoPago;
+        this.nombre = nombre;
+        this.activo = activo;
+        this.detalles = detalles;
     }
-    public void setMetodoPago(int metodoPago) {
-        this.metodoPago = metodoPago;
+  
+    public int getIdMetodoPago() {
+        return idMetodoPago;
     }
+    public void setIdMetodoPago(int idMetodoPago) {
+        this.idMetodoPago = idMetodoPago;
+    }
+
+ 
     public String getNombre() {
         return nombre;
     }
@@ -34,7 +49,7 @@ public class MetodoPago {
     
     @Override
     public String toString() {
-        return "MetodoPago [metodoPago=" + metodoPago + ", nombre=" + nombre + ", activo=" + activo + ", detalles="
+        return "MetodoPago [idMetodoPago=" + idMetodoPago + ", nombre=" + nombre + ", activo=" + activo + ", detalles="
                 + detalles + "]";
     }
 
