@@ -33,7 +33,7 @@
 
                 <section class="content container-fluid">
                     <form id="formFactura" method="post">
-                        <input type="hidden" id="detalleFactura" name="detalleFactura">
+                        
                         <div class="row my-3 text-center">
                             <div class="col-md-6 col-sm-12 p-0 ">
                                 <div class="row my-3 mx-2">
@@ -128,25 +128,25 @@
                                         <tr id="fila1">
                                             <td class="px-2">
                                                 <input type="number" class="form-control w-50" id="cantidadProductos"
-                                                    name="cantidadProductos">
+                                                   >
                                             </td>
                                             <td class="px-2">
-                                                <select class="selectProducto" style="width: 200px;" name="producto"
+                                                <select class="selectProducto" style="width: 200px;"
                                                     id="producto">
                                                     <option value=1>Cobertor de Motor</option>
                                                     <option value=2>Parabrisas</option>
                                                 </select>
                                             </td>
                                             <td class="px-2">
-                                                <input type="text" class="form-control" name="descripcion"
+                                                <input type="text" class="form-control" 
                                                     id="descripcion">
                                             </td>
                                             <td class="px-2">
-                                                <input type="number" class="form-control" name="precioFila"
+                                                <input type="number" class="form-control" 
                                                     id="precioFila">
                                             </td>
                                             <td class="px-2">
-                                                <input type="number" class="form-control" name="totalFila"
+                                                <input type="number" class="form-control" 
                                                     id="totalFila">
                                             </td>
                                             <td class="px-2">
@@ -209,7 +209,7 @@
             $.get("/obtener_metodos_pago", function (data) {
                 var options = '';
                 $.each(data, function (index, metodoPago) {
-                    options += '<option value="' + metodoPago.idMetodoPago + '">' + metodoPago.nombre + '</option>';
+                    options += '<option value="' + metodoPago.idMetodoPago + '">' + metodoPago.idMetodoPago +' '+ metodoPago.nombre + '</option>';
                 });
                 $('.selectMetodoPago').append(options);
             });
@@ -235,7 +235,7 @@
             $('#detalleTabla').append(fila);
             $('#producto' + contadorFilas).select2();
         });
-
+ 
         //quitar fila con boton
         $(document).on('click', '#btnQuitarFila', function () {
             $(this).closest('tr').remove();
@@ -267,7 +267,7 @@
         $('#formFactura').on('submit', function (event) {
             event.preventDefault();
             $('#btnCrearFactura').prop('disabled', true);
-            var detalles = [];
+            /*var detalles = [];
             $('#detalleTabla tr').each(function () {
                 var detalle = {
                     cantidad: $(this).find('input[name="cantidad"]').val(),
@@ -278,7 +278,7 @@
                 };
                 detalles.push(detalle);
             });
-            $('#detalleFactura').val(JSON.stringify(detalles));
+            $('#detalleFactura').val(JSON.stringify(detalles));*/
 
             var formData = new FormData($('#formFactura')[0]);
             console.log(formData)
@@ -296,6 +296,7 @@
                 },
                 error: function (xhr, status, error) {
                     // Maneja los errores de la solicitud
+                    alert(error);
                     console.error(error);
                     $('#btnCrearFactura').removeAttr('disabled');
                 }

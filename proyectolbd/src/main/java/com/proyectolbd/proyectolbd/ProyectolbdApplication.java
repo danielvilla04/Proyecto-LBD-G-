@@ -26,7 +26,7 @@ public class ProyectolbdApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-		String sql ="Delete from METODO_PAGO_TB WHERE ID_METODO_PAGO = 52";
+		String sql ="select * from metodo_pago_tb";
 		List<MetodoPago> metodos = jdbcTemplate.query(sql,
 		 BeanPropertyRowMapper.newInstance(MetodoPago.class));
 

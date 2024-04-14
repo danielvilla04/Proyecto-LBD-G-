@@ -34,7 +34,7 @@ public class ServiceMetodoPago {
     }
 
     public List<MetodoPago> obtenerMetodosPago() {
-    String sql = "SELECT * FROM vista_metodos_pago"; 
+    String sql = "select * from vista_metodos_pago"; 
     return jdbc.query(sql, (rs, rowNum) -> {
         MetodoPago metodoPago = new MetodoPago();
         metodoPago.setIdMetodoPago(rs.getInt("id_metodo"));

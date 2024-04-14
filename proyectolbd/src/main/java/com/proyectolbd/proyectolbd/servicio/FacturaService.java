@@ -20,11 +20,9 @@ public class FacturaService {
     private JdbcTemplate jdbc;
 
     public void insertarFactura(int idCliente, int idEmpleado, int idMetodoPago, String fechaFacturacion, String estado , String detalles, int total){
-        int id = 6; 
-        String sql = "INSERT INTO FACTURA_TB (ID_FACTURA,ID_CLIENTE,ID_EMPLEADO, ID_METODO_PAGO,detalles,FECHA_FACTURACION,ESTADO, TOTAL) VALUES (?,?,?,?,?,?,?,?)";
-        jdbc.update(sql, id,idCliente,idEmpleado,idMetodoPago,detalles, fechaFacturacion, estado ,total);
-
-    }
+        String sql = "CALL INSERTAR_FACTURA(?,?,?,?,?,?,?)";
+        jdbc.update(sql, idCliente,idEmpleado,idMetodoPago,detalles, estado, fechaFacturacion, total);
+    } 
 
  
 }

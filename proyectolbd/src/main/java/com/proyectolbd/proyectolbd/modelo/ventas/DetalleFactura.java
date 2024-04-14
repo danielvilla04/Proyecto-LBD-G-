@@ -12,7 +12,7 @@ public class DetalleFactura {
 
     public DetalleFactura() {
     }
-
+ 
 
     public DetalleFactura(int idDetalleFactura, int idFactura, int idProducto, int cantidadProductos,
             int totalFila) {

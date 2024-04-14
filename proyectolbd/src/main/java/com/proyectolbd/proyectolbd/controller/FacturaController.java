@@ -38,12 +38,11 @@ public class FacturaController {
     @PostMapping("/crear_factura")
     public String crearFactura(@RequestParam("cliente") int idCliente,
             @RequestParam("empleado") int idEmpleado,
-            @RequestParam("metodo") String idMetodoPago,
+            @RequestParam("metodo") int idMetodoPago,
             @RequestParam("fecha_facturacion") String fechaFacturacion,
             @RequestParam("estado") String estado,
             @RequestParam("detalles") String detalles,
-            @RequestParam("total") int total,
-            @RequestParam("detalleFactura") String detallesJson) throws JsonMappingException, JsonProcessingException {
+            @RequestParam("total") int total) {
         // Crear un formato para la fecha de entrada
         SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
         // Crear un formato para la fecha de salida en el formato deseado
@@ -58,19 +57,12 @@ public class FacturaController {
         } catch (ParseException e) {
             e.printStackTrace();
             // Manejar el error de análisis de fecha según sea necesario
-        }
-        // Convertir el JSON de detalles a una lista de objetos
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<DetalleFactura> details = objectMapper.readValue(detallesJson, new TypeReference<List<DetalleFactura>>() {
-        });
+        } 
 
         // Insertar la factura en la base de datos y obtener su ID
-        facturaService.insertarFactura(idCliente, idEmpleado, idEmpleado, fechaFacturacion, estado, detalles,total);
+        facturaService.insertarFactura(idCliente, idEmpleado, idMetodoPago, fechaFacturacion, estado, detalles,total);
 
-        //quitar contador
-    
-        detalleFacturaService.insertarDetalleFactura(1,1,1,20,5000);
-    
+
 
 
         

@@ -150,8 +150,8 @@ CREATE OR REPLACE PROCEDURE INSERTAR_FACTURA(
     id_empleado FACTURA_TB.ID_EMPLEADO%TYPE,
     id_metodo FACTURA_TB.ID_METODO_PAGO%TYPE,
     detalles FACTURA_TB.DETALLES%TYPE,
+    estado FACTURA_TB.ESTADO%TYPE,
     fecha_factuacion FACTURA_TB.FECHA_FACTURACION%TYPE,
-    fecha_impresion FACTURA_TB.FECHA_IMPRESION%TYPE,
     total FACTURA_TB.TOTAL%TYPE
 )     
 AS
@@ -173,8 +173,8 @@ BEGIN
     
     --Si el registro no existe se inserta uno nuevo
     IF validar = FALSE THEN
-        INSERT INTO FACTURA_TB(ID_FACTURA, ID_CLIENTE, ID_EMPLEADO, ID_METODO_PAGO, DETALLES, FECHA_FACTURACION, FECHA_IMPRESION, TOTAL)
-        VALUES(id_factura,id_cliente,id_empleado,id_metodo,detalles,fecha_factuacion,fecha_impresion,total);
+        INSERT INTO FACTURA_TB(ID_FACTURA, ID_CLIENTE, ID_EMPLEADO, ID_METODO_PAGO, DETALLES, ESTADO, FECHA_FACTURACION, TOTAL)
+        VALUES(id_factura,id_cliente,id_empleado,id_metodo,detalles, estado, fecha_factuacion, total);
         COMMIT;
 
     END IF;
