@@ -13,10 +13,12 @@ import java.util.LinkedList;
 
 import java.util.Map;
 
+import com.proyectolbd.proyectolbd.modelo.Empleado;
 import com.proyectolbd.proyectolbd.modelo.Factura;
 import com.proyectolbd.proyectolbd.modelo.OrdenProveedor;
 import com.proyectolbd.proyectolbd.modelo.ventas.DetalleFactura;
 import com.proyectolbd.proyectolbd.modelo.ventas.DetalleOrdenProveedor;
+import com.proyectolbd.proyectolbd.servicio.EmpleadoService;
 import com.proyectolbd.proyectolbd.servicio.ServiceMetodoPago;
 import com.proyectolbd.proyectolbd.servicio.VentaService;
 
@@ -25,6 +27,8 @@ import com.proyectolbd.proyectolbd.servicio.VentaService;
 public class MenuController {
    @Autowired
    private ServiceMetodoPago metodoPago;
+   @Autowired
+   private EmpleadoService empleado;
 
    @Autowired
    private VentaService venta;
@@ -100,5 +104,14 @@ public class MenuController {
   
       return "/pages/PedidosProveedores/pedidos_proveedores_lista";
    }
+
+     //// Links de Empleados
+     @GetMapping("/empleados")
+     public String mostrarEmpleados(Model model) {
+        List<Map<String, Object>> empleados = empleado.obtenerVistaEmpleados();
+        model.addAttribute("empleados", empleados);
+        return "/pages/Empleado/empleados";
+     }
+
 
 }

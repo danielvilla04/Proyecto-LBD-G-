@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+
+
+<title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Empleados</h3>
+                    <p class="text-subtitle text-muted">Administración de Empleados</p>
+                </div>
+                <section class="section"> <!--Seccion dinamica-->
+
+                    <div class="row my-3">
+                        <div class="col-12" style="overflow: scroll;"><!--Tablas de metodos de pago-->
+                            <table class=" display" id="tablaEmpleados">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Id Empleado</th>
+                                        <th scope="col">Nombre Empleado</th>
+                                        <th scope="col">Cedula</th>
+                                        <th scope="col">Edad</th>
+                                        <th scope="col">Genero</th>
+                                        <th scope="col">Telefono</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Direccion</th>
+                                        <th scope="col">Contratación</th>
+                                        <th scope="col">Puesto</th>
+                                        <th scope="col">Salario</th>
+
+
+                                        <th>Acciones</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="empleado : ${empleados}">
+                                        <td th:text="${empleado['id_empleado']}"></td>
+                                        <td th:text="${empleado['nombre_completo']}"></td>
+                                        <td th:text="${empleado['NUMERO_CEDULA']}"></td>
+                                        <td th:text="${empleado['edad']}"></td>
+                                        <td th:text="${empleado['genero']}"></td>
+                                        <td th:text="${empleado['telefono']}"></td>
+                                        <td th:text="${empleado['email']}"></td>
+                                        <td th:text="${empleado['DIRECCION']}"></td>
+                                        <td th:text="${empleado['FECHA_CONTRATACION']}"></td>
+                                        <td th:text="${empleado['NOMBRE_PUESTO']}"></td>
+                                        <td th:text="${empleado['SALARIO']}"></td>
+
+                                        <td>
+                                            <button class="btn btn-danger delete-btn"
+                                                th:onclick="'eliminar(\'' + ${empleado.id_empleado} + '\')'">
+                                                Eliminar</button>
+                                                <button class="btn btn-success update-btn" th:onclick="'actualizarEmpleado(\''+ ${empleado.id_empleado}+'\')'">
+                                                    Actualizar
+                                                </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
+                            <p class="h4 m-3 text-center">Ingresar un Empleado</p>
+                            <form method="post" action="insert_empleado" enctype="application/json" id="empleadosForm">
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombreEmpleado" name="nombreEmpleado">
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Primer Apellido</label>
+                                    <input type="text" class="form-control" id="primerApellido" name="primerApellido">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Segundo Apellido</label>
+                                    <input type="text" class="form-control" id="segundoApellido" name="segundoApellido">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Numero Cedula</label>
+                                    <input type="text" class="form-control" id="cedula" name="cedula">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Edad</label>
+                                    <input type="number" class="form-control" id="edad" name="edad">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Genero</label>
+                                    <input type="text" class="form-control" id="genero" name="genero">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Direccion</label>
+                                    <input type="text" class="form-control" id="direccion" maxlength="50"
+                                        name="direccion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Fecha Contratacion</label>
+                                    <input type="date" class="form-control" id="fechaContratacion"
+                                        name="fechaContratacion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="puesto" class="form-label">Puesto</label>
+                                    <select class="selectPuestos form-control w-85" aria-label="Default select example"
+                                        id="puesto" name="puesto">
+                                        <option value="">Seleccione el Puesto</option>
+
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Telefono</label>
+                                    <input type="String" class="form-control" id="telefono" name="telefono">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary text-center"
+                                    id="btnGuardar">Guardar</button>
+                            </form>
+                        </div>
+
+                        <div class="col-12">
+                            <!-- Modal de Actualización -->
+                            <div class="modal fade" id="modalActualizarEmpleado" tabindex="-1" role="dialog"
+                                aria-labelledby="modalActualizarEmpleadoLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalActualizarEmpleadoLabel">Actualizar
+                                                Empleado</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Formulario de actualización -->
+                                            <form method="post" action="actualizar_empleado" enctype="application/json"
+                                                id="formActualizarEmpleado">
+                                                <div class="mb-3">
+                                                    <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                                                    <input type="text" class="form-control" id="nombreEmpleadoUpdate"
+                                                        name="nombreEmpleado">
+
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Primer
+                                                        Apellido</label>
+                                                    <input type="text" class="form-control" id="primerApellidoUpdate"
+                                                        name="primerApellido">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Segundo
+                                                        Apellido</label>
+                                                    <input type="text" class="form-control" id="segundoApellidoUpdate"
+                                                        name="segundoApellido">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Numero
+                                                        Cedula</label>
+                                                    <input type="text" class="form-control" id="cedulaUpdate"
+                                                        name="cedula">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Edad</label>
+                                                    <input type="number" class="form-control" id="edadUpdate"
+                                                        name="edad">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Genero</label>
+                                                    <input type="text" class="form-control" id="generoUpdate"
+                                                        name="genero">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Direccion</label>
+                                                    <input type="text" class="form-control" id="direccionUpdate"
+                                                        maxlength="50" name="direccion">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Fecha
+                                                        Contratacion</label>
+                                                    <input type="date" class="form-control" id="fechaContratacionUpdate"
+                                                        name="fechaContratacion">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="puesto" class="form-label">Puesto</label>
+                                                    <select class="selectPuestos form-control w-85"
+                                                        aria-label="Default select example" id="puestoUpdate"
+                                                        name="puesto">
+                                                        <option value="">Seleccione el Puesto</option>
+
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Telefono</label>
+                                                    <input type="String" class="form-control" id="telefonoUpdate"
+                                                        name="telefono">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="nombreMetodoPago" class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="emailUpdate"
+                                                        name="email">
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary text-center"
+                                                    id="btnGuardar">Guardar</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary"
+                                                id="btnActualizarEmpleado">Actualizar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+
+
+        function eliminar(id_empleado) {
+            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
+                $.ajax({
+                    url: 'empleados/eliminar_empleado',
+                    type: 'POST',
+                    data: { id_empleado: id_empleado },
+                    success: function (data, textStatus, xhr) {
+                        // Recargar la página después de la eliminación exitosa
+                        console.log("aquiiiiii")
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+
+
+        $(document).ready(function () {
+            console.log('hola')
+            $('#tablaEmpleados').DataTable();
+            $('#empleadosForm').submit(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url: 'empleados/insert_empleado',
+                    type: 'POST',
+                    data: new FormData($('#empleadosForm')[0]),
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#empleadosForm')[0].reset();
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+
+            $('.selectPuestos').select2();
+
+
+            $.get("empleados/obtener_puestos", function (data) {
+                var options = '';
+                $.each(data, function (index, puesto) {
+                    options += '<option value="' + puesto.idPuesto + '">' + puesto.nombrePuesto + '</option>';
+                });
+                $('.selectPuestos').append(options);
+            });
+
+        });
+
+
+        // Función para abrir el modal y cargar los datos del empleado
+        // Función para abrir el modal y cargar los datos del empleado
+        function actualizar(idEmpleado) {
+            // Realizar una petición AJAX para obtener los datos del empleado
+            $.ajax({
+                url: '/empleados/listar/' + idEmpleado, // URL del endpoint que devuelve los datos del empleado por su ID
+                type: 'GET',
+                success: function (response) {
+                    console.log('Error al obtener ');
+                    /*// Una vez obtenidos los datos del empleado, los cargamos en el formulario
+                    $('#nombreEmpleadoUpdate').val(response.nombre);
+                    $('#primerApellidoUpdate').val(response.primerApellido);
+                    $('#segundoApellidoUpdate').val(response.segundoApellido);
+                    $('#cedulaUpdate').val(response.numeroCedula);
+                    $('#edadUpdate').val(response.edad);
+                    $('#generoUpdate').val(response.genero);
+                    $('#direccionUpdate').val(response.direccion);
+                    $('#fechaContratacionUpdate').val(response.fechaContratacion);
+                    $('#puestoUpdate').val(response.puesto);
+                    $('#telefonoUpdate').val(response.telefono);
+                    $('#emailUpdate').val(response.email);
+
+                    // Abrir el modal
+                    $('#modalActualizarEmpleado').modal('show');*/
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error al obtener los datos del empleado:', error);
+                }
+            });
+        }
+
+        function actualizarEmpleado(id) {
+            window.location.href = '/empleados/listar/' + id;
+        }
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
