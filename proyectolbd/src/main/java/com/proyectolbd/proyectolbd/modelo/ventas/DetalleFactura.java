@@ -7,7 +7,7 @@ public class DetalleFactura {
     private int idFactura;
     private int idProducto;
     private int cantidadProductos;
-    private int totalFila;
+    private double totalFila;
 
 
     public DetalleFactura() {
@@ -15,7 +15,7 @@ public class DetalleFactura {
  
 
     public DetalleFactura(int idDetalleFactura, int idFactura, int idProducto, int cantidadProductos,
-            int totalFila) {
+    double totalFila) {
         this.idDetalleFactura = idDetalleFactura;
         this.idFactura = idFactura;
         this.idProducto = idProducto;
@@ -64,12 +64,12 @@ public class DetalleFactura {
     }
 
 
-    public int getTotalFila() {
+    public double getTotalFila() {
         return totalFila;
     }
 
 
-    public void setTotalFila(int totalFila) {
+    public void setTotalFila(double totalFila) {
         this.totalFila = totalFila;
     }
 

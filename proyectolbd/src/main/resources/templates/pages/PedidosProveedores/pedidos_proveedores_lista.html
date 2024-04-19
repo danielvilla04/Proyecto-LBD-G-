@@ -26,28 +26,23 @@
             <div class="main-content container-fluid" th:fragment="contenido">
                 <!--layout:fragment="content"Dinamic Content-->
                 <div class="page-title">
-                    <h3>Ventas</h3>
-                    <p class="text-subtitle text-muted">Historial de Ventas</p>
+                    <h3>Pedidos Proveedor</h3>
+                    <p class="text-subtitle text-muted">Informe de Pedidos de los Proveedores</p>
                 </div>
                 <section class="section">
                     <div class="container-fluid">
                         <div class="row my-3">
-                            <div class="col-12 py-3 ">
-                                <button type="button" id="actualizarBtn" class="btn btn-info">Actualizar Ventas</button>
-                            </div>
                             <div class="col-12 py-3">
-                                <table id="tablaVentas">
+                                <table id="tablaPedidos">
                                     <thead>
                                         <tr>
                                             <!-- Asegúrate de ajustar los encabezados según tu esquema de base de datos -->
-                                            <th>Id Ventas</th>
-                                            <th>Id Factura</th>
+                                            <th>Proveedor</th>
+                                            <th>Detalle del Pedido</th>
                                             <th>Fecha de la Venta</th>
                                             <th>Total de la Venta</th>
+                                            <th>Cantidad Total de Productos</th>
                                             <th>Acciones</th>
-
-
-
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -75,15 +70,17 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#tablaVentas').DataTable({
+            $('#tablaPedidos').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/ventas", // Ruta al endpoint del controlador que devuelve los datos de ventas
+                "ajax": "orden/pedidos", // Ruta al endpoint del controlador que devuelve los datos de ventas
                 "columns": [
-                    { "data": "IDVENTA" },
-                    { "data": "IDFACTURA" },
-                    { "data": "FECHAVENTA" },
-                    { "data": "TOTALVENTA" },
+                    { "data": "NOMBRE_PROVEEDOR" },
+                    { "data": "DETALLES_ORDEN" },
+                    { "data": "FECHA_PEDIDO" },
+                    { "data": "FECHA_ESTIMADA_FIN" }, 
+                    { "data": "CANTIDAD_TOTAL_PRODUCTOS" },
+
                     {
                         "data": null,
                         "render": function (data, type, row) {
@@ -93,44 +90,10 @@
                     // Agrega más columnas según tus datos
                 ]
             });
-            // Manejar el clic del botón
-            $("#actualizarBtn").click(function () {
-                // Realizar la solicitud POST al controlador
-                $.ajax({
-                    url: '/actualizar_ventas',
-                    type: 'POST',
-                    success: function (response) {
-                        $('#tablaVentas').DataTable().ajax.reload();
-                        console.log("La solicitud POST se realizó con éxito");
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Error al realizar la solicitud POST:", error);
-                    }
-                });
-            });
-
-
         });
 
-        $('#tablaVentas').on('click', '.eliminar-btn', function () {
-            var idVenta = $(this).data('id');
-            eliminarVenta(idVenta);
-        });
 
-        function eliminarVenta(idVenta) {
-            $.ajax({
-                type: 'POST',
-                url: '/eliminar_venta/' + idVenta, // Ruta al endpoint del controlador para eliminar el registro
-                success: function (response) {
-                    // Actualizar la tabla después de eliminar el registro
-                    $('#tablaVentas').DataTable().ajax.reload();
 
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        }
 
 
     </script>

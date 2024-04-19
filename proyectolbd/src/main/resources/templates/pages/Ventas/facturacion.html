@@ -32,7 +32,7 @@
                 </div>
 
                 <section class="content container-fluid">
-                    <form id="formFactura" method="post">
+                    <form id="formFactura" th:action="@{/crear_factura}" th:object="${factura}" method="post">
                         
                         <div class="row my-3 text-center">
                             <div class="col-md-6 col-sm-12 p-0 ">
@@ -42,11 +42,9 @@
                                     </div>
                                     <div class="col-md-7 col-sm-6  ">
                                         <select class="selectCliente form-control w-85"
-                                            aria-label="Default select example" id="cliente" name="cliente">
-                                            <option selected>Seleccione el cliente</option>
-                                            <option value=1>One</option>
-                                            <option value=2>Two</option>
-                                            <option value=3>Three</option>
+                                            aria-label="Default select example" id="cliente" th:field="*{idCliente}" name="cliente">
+                                            <option value="0">Seleccione el cliente</option>
+
                                         </select>
                                     </div>
                                 </div>
@@ -57,11 +55,8 @@
                                     </div>
                                     <div class="col-md-7 col-sm-6  ">
                                         <select class="selectEmpleado form-select w-85"
-                                            aria-label="Default select example" id="empleado" name="empleado">
-                                            <option selected>Seleccione el empleado</option>
-                                            <option value=1>One</option>
-                                            <option value=2>Two</option>
-                                            <option value=3>Three</option>
+                                            aria-label="Default select example" id="selectEmpleado" th:field="*{idEmpleado}" name="empleado">
+                                            <option value="0">Seleccione el empleado</option>
                                         </select>
                                     </div>
                                 </div>
@@ -71,8 +66,8 @@
                                     </div>
                                     <div class="col-md-7 col-sm-6  ">
                                         <select class="selectMetodoPago form-select w-85"
-                                            aria-label="Default select example" name="metodo" id="metodo_pago">
-                                            <option selected>Seleccione el Metodo de Pago</option>
+                                            aria-label="Default select example" name="metodo" th:field="*{idMetodoPago}" id="metodo_pago">
+                                            <option value="0" selected>Seleccione el Metodo de Pago</option>
                                         </select>
                                     </div>
                                 </div>
@@ -84,7 +79,7 @@
                                         <p class="text-white">Fecha de Facturación: </p>
                                     </div>
                                     <div class="col-md-7 col-sm-6  d-flex align-items-center">
-                                        <input class="form-control" type="date" id="fecha_facturacion"
+                                        <input class="form-control" type="date" th:field="*{fechaFacturacion}" id="fecha_facturacion"
                                             name="fecha_facturacion">
                                     </div>
                                 </div>
@@ -93,9 +88,9 @@
                                         <p class="text-white">Estado de Factura: </p>
                                     </div>
                                     <div class="col-md-7 col-sm-6  ">
-                                        <select class="form-select w-85" aria-label="Default select example" id="estado"
+                                        <select class="form-select w-85" aria-label="Default select example" th:field="*{estado}" id="estado"
                                             name="estado">
-                                            <option selected>Estado de la Factura</option>
+                                            <option value="0">Estado de la Factura</option>
                                             <option value="Cancelada">Cancelada</option>
                                             <option value="Pendiente">Pendiente</option>
                                         </select>
@@ -107,7 +102,7 @@
                                         <p class="text-white">Detalles: </p>
                                     </div>
                                     <div class="col-md-7 col-sm-6  d-flex align-items-center">
-                                        <input class="form-control" type="text" id="detalles" name="detalles">
+                                        <input class="form-control" type="text" id="detalles" th:field="*{detalles}" name="detalles">
                                     </div>
                                 </div>
                             </div>
@@ -125,16 +120,14 @@
                                         </tr>
                                     </thead>
                                     <tbody id="detalleTabla">
-                                        <tr id="fila1">
+                                        <tr id="fila1" th:each="objeto, status : *{detallesFac}">
                                             <td class="px-2">
-                                                <input type="number" class="form-control w-50" id="cantidadProductos"
-                                                   >
+                                                <input type="number" class=" cantidadProductos form-control w-50"  th:field="*{detallesFac[__${status.index}__].cantidadProductos}" name="cantidadProductos" id="cantidadProductos">
                                             </td>
                                             <td class="px-2">
-                                                <select class="selectProducto" style="width: 200px;"
-                                                    id="producto">
-                                                    <option value=1>Cobertor de Motor</option>
-                                                    <option value=2>Parabrisas</option>
+                                                <select class="selectProducto" style="width: 200px;" th:field="*{detallesFac[__${status.index}__].idProducto}"
+                                                th:id="'selectProducto_' + ${status.index}">
+                             
                                                 </select>
                                             </td>
                                             <td class="px-2">
@@ -142,11 +135,11 @@
                                                     id="descripcion">
                                             </td>
                                             <td class="px-2">
-                                                <input type="number" class="form-control" 
+                                                <input type="number" class="precioFila form-control"  name="precioFila"
                                                     id="precioFila">
                                             </td>
                                             <td class="px-2">
-                                                <input type="number" class="form-control" 
+                                                <input type="number" class="totalFila form-control" name="totalFila" th:field="*{detallesFac[__${status.index}__].totalFila}"
                                                     id="totalFila">
                                             </td>
                                             <td class="px-2">
@@ -156,14 +149,12 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="col-6 mt-3">
-                                <button class="btn btn-info" id="btnAgregarFila">+ Agregar Fila</button>
-                            </div>
+                         
                             <div class="col-6 mt-3">
                                 <div class="row  my-2">
                                     <div class="col-6 bg-primary text-white">Total: </div>
                                     <div class="col-6 ">
-                                        <input type="number" id="total" name="total">
+                                        <input type="number" id="total" th:field="*{total}" name="total">
                                     </div>
                                 </div>
                             </div>
@@ -209,99 +200,80 @@
             $.get("/obtener_metodos_pago", function (data) {
                 var options = '';
                 $.each(data, function (index, metodoPago) {
-                    options += '<option value="' + metodoPago.idMetodoPago + '">' + metodoPago.idMetodoPago +' '+ metodoPago.nombre + '</option>';
+                    options += '<option value="' + metodoPago.idMetodoPago + '">'+ metodoPago.nombre + '</option>';
                 });
                 $('.selectMetodoPago').append(options);
+            });
+            $.get("/orden/obtener_productos", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, producto) {
+                    options += '<option value="' + producto.idProducto + '"> '+ producto.nombreProducto + '</option>';
+                });
+                $('.selectProducto').append(options);
+            });
+            $.get("/obtener_empleados", function (data) {
+                var options = '';
+                $.each(data, function (index, empleado) {
+                    options += '<option value="' + empleado.idEmpleado + '">'+ empleado.nombreEmpleado + '</option>';
+                });
+                $('.selectEmpleado').append(options);
+            });
+            $.get("/obtener_clientes", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, cliente) {
+                    options += '<option value="' + cliente.idCliente + '"> '+ cliente.nombreCliente + '</option>';
+                });
+                $('.selectCliente').append(options);
+            });
+            $.get("/obtener_productos", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, producto) {
+                    options += '<option value="' + producto.idProducto + '"> '+ producto.nombreProducto+ '</option>';
+                });
+                $('.selectProducto').append(options);
             });
         });
 
 
-        //agregar filas con el boton
-        var contadorFilas = 1;
-
-        $('#btnAgregarFila').click(function () {
-            contadorFilas++;
-            var fila = '<tr id="fila' + contadorFilas + '">' +
-                '<td class="px-2"><input type="number" class="form-control w-50" id="cantidadProductos' + contadorFilas + '" name="cantidadProductos"></td>' +
-                '<td class="px-2"><select class="selectProducto" style="width: 200px;" name="producto' + contadorFilas + '" id="producto' + contadorFilas + '">' +
-                '<option value="1">Cobertor de Motor</option>' +
-                '<option value="2">Parabrisas</option>' +
-                '</select></td>' +
-                '<td class="px-2"><input type="text" class="form-control" name="descripcion' + contadorFilas + '" id="descripcion' + contadorFilas + '"></td>' +
-                '<td class="px-2"><input type="number" class="form-control" name="precioFila' + contadorFilas + '" id="precioFila' + contadorFilas + '"></td>' +
-                '<td class="px-2"><input type="number" class="form-control" name="totalFila' + contadorFilas + '" id="totalFila' + contadorFilas + '"></td>' +
-                '<td class="px-2"><button class="btn w-10 btnQuitarFila" id="btnQuitarFila">X</button></td>' +
-                '</tr>';
-            $('#detalleTabla').append(fila);
-            $('#producto' + contadorFilas).select2();
-        });
  
         //quitar fila con boton
         $(document).on('click', '#btnQuitarFila', function () {
             $(this).closest('tr').remove();
         });
-        $(document).on('input', 'input[name^="cantidadProductos"], input[name^="precioFila"]', function () {
-            // Calcula el precio total de cada fila
-            $('input[name^="totalFila"]').each(function () {
-                var cantidad = $(this).closest('tr').find('input[name^="cantidadProductos"]').val();
-                var precioUnitario = $(this).closest('tr').find('input[name^="precioFila"]').val();
+        document.addEventListener("DOMContentLoaded", function() {
+    // Obtener todos los campos de cantidad y precioFila
+    var cantidadCampos = document.querySelectorAll(".cantidadProductos");
+    var precioCampos = document.querySelectorAll(".precioFila");
 
-                // Calcula el precio total
-                var precioTotal = cantidad * precioUnitario;
+    // Agregar evento change a cada campo de cantidad y precioFila
+    cantidadCampos.forEach(function(cantidadCampo) {
+        cantidadCampo.addEventListener("change", recalcularTotal);
+    });
 
-                // Actualiza el valor del campo de precio total
-                $(this).val(precioTotal);
-            });
+    precioCampos.forEach(function(precioCampo) {
+        precioCampo.addEventListener("change", recalcularTotal);
+    });
 
-            // Calcula la suma de todos los totales de fila
-            var sumaTotal = 0;
-            $('input[name^="totalFila"]').each(function () {
-                var precioTotalFila = parseFloat($(this).val());
-                sumaTotal += isNaN(precioTotalFila) ? 0 : precioTotalFila;
-            });
+    function recalcularTotal() {
+        var fila = this.closest("tr"); // Obtener la fila actual
+        var cantidad = parseFloat(fila.querySelector(".cantidadProductos").value);
+        var precio = parseFloat(fila.querySelector(".precioFila").value);
+        var total = cantidad * precio;
+        fila.querySelector(".totalFila").value = isNaN(total) ? '' : total.toFixed(2);
 
-            // Actualiza el valor del campo de total
-            $('#total').val(sumaTotal);
+        // Calcular y actualizar el total general
+        var totales = document.querySelectorAll(".totalFila");
+        var totalGeneral = 0;
+        totales.forEach(function(total) {
+            totalGeneral += parseFloat(total.value) || 0;
         });
-        //Crear factura
-        $('#formFactura').on('submit', function (event) {
-            event.preventDefault();
-            $('#btnCrearFactura').prop('disabled', true);
-            /*var detalles = [];
-            $('#detalleTabla tr').each(function () {
-                var detalle = {
-                    cantidad: $(this).find('input[name="cantidad"]').val(),
-                    producto: $(this).find('select[name="producto"]').val(),
-                    descripcion: $(this).find('input[name="descripcion"]').val(),
-                    precioUnitario: $(this).find('input[name="precioUnitario"]').val(),
-                    totalFila: $(this).find('input[name="totalFila"]').val()
-                };
-                detalles.push(detalle);
-            });
-            $('#detalleFactura').val(JSON.stringify(detalles));*/
-
-            var formData = new FormData($('#formFactura')[0]);
-            console.log(formData)
-            $.ajax({
-                url: '/crear_factura',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    // Maneja la respuesta de acuerdo a tus necesidades
-                    console.log(response);
-                    $('#btnCrearFactura').removeAttr('disabled');
-                    $('#formFactura')[0].reset();
-                },
-                error: function (xhr, status, error) {
-                    // Maneja los errores de la solicitud
-                    alert(error);
-                    console.error(error);
-                    $('#btnCrearFactura').removeAttr('disabled');
-                }
-            });
-        });
+        document.getElementById("total").value = totalGeneral.toFixed(2);
+    }
+});
+       
 
     </script>
 

@@ -20,15 +20,14 @@ CREATE OR REPLACE PACKAGE facturacion AS
     detalles METODO_PAGO_TB.DETALLES%TYPE);
     
     --Metodo para insertar factura
-    PROCEDURE INSERTAR_FACTURA(
-        id_factura FACTURA_TB.ID_FACTURA%TYPE,
+    FUNCTION INSERTAR_FACTURA(
         id_cliente FACTURA_TB.ID_CLIENTE%TYPE,
         id_empleado FACTURA_TB.ID_EMPLEADO%TYPE,
         id_metodo FACTURA_TB.ID_METODO_PAGO%TYPE,
         detalles FACTURA_TB.DETALLES%TYPE,
         estado FACTURA_TB.ESTADO%TYPE,
-        fecha_factuacion FACTURA_TB.FECHA_FACTURACION%TYPE,
-        total FACTURA_TB.TOTAL%TYPE);     
+        fecha_facturacion FACTURA_TB.FECHA_FACTURACION%TYPE,
+        total FACTURA_TB.TOTAL%TYPE) RETURN NUMBER;     
         
     --Metodo para eliminar factura
     PROCEDURE ELIMINAR_FACTURA(
@@ -36,7 +35,7 @@ CREATE OR REPLACE PACKAGE facturacion AS
     
     --Metodo para insertar detalle factura
     PROCEDURE INSERTAR_DETALLE_FACTURA(
-        id_detalle_factura DETALLE_FACTURA_TB.ID_DETALLE_FACTURA%TYPE,
+       
         id_factura DETALLE_FACTURA_TB.ID_FACTURA%TYPE,
         id_producto DETALLE_FACTURA_TB.ID_PRODUCTO%TYPE,
         cantidad_producto DETALLE_FACTURA_TB.CANTIDAD_PRODUCTOS%TYPE,
@@ -176,46 +175,36 @@ CREATE OR REPLACE PACKAGE BODY facturacion AS
     
     
     --Insertar Factura
-    PROCEDURE INSERTAR_FACTURA(
-        id_factura FACTURA_TB.ID_FACTURA%TYPE,
+    FUNCTION INSERTAR_FACTURA(
         id_cliente FACTURA_TB.ID_CLIENTE%TYPE,
         id_empleado FACTURA_TB.ID_EMPLEADO%TYPE,
         id_metodo FACTURA_TB.ID_METODO_PAGO%TYPE,
         detalles FACTURA_TB.DETALLES%TYPE,
         estado FACTURA_TB.ESTADO%TYPE,
-        fecha_factuacion FACTURA_TB.FECHA_FACTURACION%TYPE,
+        fecha_facturacion FACTURA_TB.FECHA_FACTURACION%TYPE,
         total FACTURA_TB.TOTAL%TYPE
-    )     
+    ) RETURN NUMBER
     AS
         validar BOOLEAN;
         cantidad NUMBER;
+        v_id_factura NUMBER;
     
     BEGIN
         
-        SELECT COUNT(*) INTO cantidad
-        FROM FACTURA_TB
-        WHERE ID_FACTURA = id_factura;
-        
-        --Validar la existencia de un registro con el id
-        IF cantidad > 0 THEN
-            validar := TRUE;
-        ELSE
-            validar := FALSE;
-        END IF;
-        
         --Si el registro no existe se inserta uno nuevo
-        IF validar = FALSE THEN
-            INSERT INTO FACTURA_TB(ID_FACTURA, ID_CLIENTE, ID_EMPLEADO, ID_METODO_PAGO, DETALLES, ESTADO, FECHA_FACTURACION, TOTAL)
-            VALUES(id_factura,id_cliente,id_empleado,id_metodo,detalles, estado, fecha_factuacion, total);
+   
+            INSERT INTO FACTURA_TB(ID_CLIENTE, ID_EMPLEADO, ID_METODO_PAGO, DETALLES, ESTADO, FECHA_FACTURACION, TOTAL)
+            VALUES(id_cliente,id_empleado,id_metodo,detalles, estado, fecha_facturacion, total)
+            RETURNING ID_FACTURA INTO v_id_factura;
+            DBMS_OUTPUT.PUT_LINE(v_id_factura);
             COMMIT;
+            return v_id_factura;
     
-        END IF;
+
+    END INSERTAR_FACTURA;
     
-    EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-            DBMS_OUTPUT.PUT_LINE('No se encontraron datos');
-    END;
-    
+
+
     --Eliminar factura
     PROCEDURE ELIMINAR_FACTURA(id_factura FACTURA_TB.ID_FACTURA%TYPE)
     AS
@@ -247,7 +236,6 @@ CREATE OR REPLACE PACKAGE BODY facturacion AS
     
     --Insertar detalle dactura
     PROCEDURE INSERTAR_DETALLE_FACTURA(
-        id_detalle_factura DETALLE_FACTURA_TB.ID_DETALLE_FACTURA%TYPE,
         id_factura DETALLE_FACTURA_TB.ID_FACTURA%TYPE,
         id_producto DETALLE_FACTURA_TB.ID_PRODUCTO%TYPE,
         cantidad_producto DETALLE_FACTURA_TB.CANTIDAD_PRODUCTOS%TYPE,
@@ -259,30 +247,36 @@ CREATE OR REPLACE PACKAGE BODY facturacion AS
     
     BEGIN
         
-        SELECT COUNT(*) INTO cantidad
-        FROM DETALLE_FACTURA_TB
-        WHERE ID_DETALLE_FACTURA = id_detalle_factura;
-        
-        --Validar la existencia de un registro con el id
-        IF cantidad > 0 THEN
-            validar := TRUE;
-        ELSE
-            validar := FALSE;
-        END IF;
-        
-        --Si el registro no existe se inserta uno nuevo
-        IF validar = FALSE THEN
-            INSERT INTO DETALLE_FACTURA_TB(ID_DETALLE_FACTURA, ID_FACTURA, ID_PRODUCTO, CANTIDAD_PRODUCTOS, PRECIO_FILA)
-            VALUES(id_detalle_factura, id_factura,id_producto ,cantidad_producto,precio_fila);
+
+            INSERT INTO DETALLE_FACTURA_TB(ID_FACTURA, ID_PRODUCTO, CANTIDAD_PRODUCTOS, PRECIO_FILA)
+            VALUES(id_factura,id_producto ,cantidad_producto,precio_fila);
             COMMIT;
     
-        END IF;
     
-    EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-            DBMS_OUTPUT.PUT_LINE('No se encontraron datos');
     END;
 
    
     
 END facturacion;
+
+DECLARE
+    id_cliente_factura NUMBER := 5000; 
+    id_empleado_factura NUMBER := 9000; 
+    id_metodo_pago_factura NUMBER := 1;
+    detalles_factura VARCHAR2(100) := 'Detalles de la factura';
+    estado_factura VARCHAR2(20) := 'Pendiente'; 
+    fecha_facturacion_factura DATE := SYSDATE;
+    total_factura NUMBER := 100.00;
+    id_factura_generado NUMBER;
+BEGIN
+    id_factura_generado := facturacion.INSERTAR_FACTURA(
+        id_cliente => id_cliente_factura,
+        id_empleado => id_empleado_factura,
+        id_metodo => id_metodo_pago_factura,
+        detalles => detalles_factura,
+        estado => estado_factura,
+        fecha_facturacion => fecha_facturacion_factura,
+        total => total_factura
+    );
+    DBMS_OUTPUT.PUT_LINE('ID de la factura generada: ' || id_factura_generado);
+END;

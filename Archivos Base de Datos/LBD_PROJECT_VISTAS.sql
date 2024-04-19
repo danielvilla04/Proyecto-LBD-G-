@@ -1,5 +1,26 @@
 -- Archivo para crear las VISTAS que trajarán dentro de la DB
 
+
+--Vista de pedidos de proveedores
+CREATE OR REPLACE VIEW v_pedidos_proveedores AS
+SELECT 
+    PR.NOMBRE_EMPRESA AS NOMBRE_PROVEEDOR,
+    OP.DETALLES AS DETALLES_ORDEN,
+    TO_CHAR(OP.FECHA_PEDIDO,'MM-DD-YYYY') FECHA_PEDIDO,
+    TO_CHAR(OP.FECHA_ESTIMADA_FIN,'MM-DD-YYYY')FECHA_ESTIMADA_FIN,
+    SUM(DOP.CANTIDAD) AS CANTIDAD_TOTAL_PRODUCTOS
+FROM 
+    ORDEN_PROVEEDOR_TB OP
+JOIN 
+    DETALLE_ORDEN_PROVEEDOR_TB DOP ON OP.ID_ORDEN_PROVEEDOR = DOP.ID_ORDEN_PROVEEDOR
+JOIN 
+    PROVEEDOR_TB PR ON OP.ID_PROVEEDOR = PR.ID_PROVEEDOR
+GROUP BY 
+    OP.ID_ORDEN_PROVEEDOR, PR.NOMBRE_EMPRESA, OP.DETALLES, OP.FECHA_PEDIDO, OP.FECHA_ESTIMADA_FIN;
+
+
+SELECT * FROM v_pedidos_proveedores;
+
 ----------------------Vistas para el apartado de facturacion
 --vista de tabla facturas
 CREATE OR REPLACE VIEW v_facturas AS
@@ -37,7 +58,17 @@ SELECT
     ESTADO_PEDIDO
 FROM 
     PEDIDO_CLIENTE_TB;
-
+    
+--VSITA VENTAS
+CREATE OR REPLACE VIEW VISTA_VENTAS AS
+SELECT  
+    ID_VENTA idVenta,
+    ID_FACTURA idFactura,
+    TO_CHAR(FECHA_VENTA, 'MM-DD-YYYY') fechaVenta,
+    TOTAL_VENTA totalVenta
+FROM 
+    HISTORIAL_VENTAS;
+SELECT * FROM VISTA_VENTAS;
 
 ------------------------ Vistas  de los pedidos de clientes
 CREATE OR REPLACE VIEW RESUMEN_PEDIDOS_CLIENTES AS
@@ -116,6 +147,11 @@ SELECT ID_PRODUCTO, NOMBRE_PRODUCTO, DESCRIPCION_PRODUCTO, PRECIO
 FROM PRODUCTO_TB
 WHERE PRECIO > 20000; ---- Reemplazar por el valor por el que queremos realizar la consulta
 
+------Vista para obtener id producto y nombre
+CREATE OR REPLACE VIEW v_producto_id AS
+SELECT ID_PRODUCTO, NOMBRE_PRODUCTO 
+FROM PRODUCTO_TB;
+select * from v_producto_id
 
 
 
@@ -178,6 +214,11 @@ FROM PROVEEDOR_TB;
 -- Ver vista
 SELECT * FROM VISTA_PROVEEDORES;
 
+--Vista por id y nombre empresa
+CREATE VIEW v_proveedor_id AS
+SELECT id_proveedor, nombre_empresa
+FROM PROVEEDOR_TB;
+select * from v_proveedor_id
 
 /* ============= Vista de proveedores por tipo ============= */
 CREATE VIEW VISTA_PROVEEDORES_POR_TIPO AS
@@ -267,3 +308,18 @@ WHERE EDAD > 30;
 SELECT * FROM VISTA_CLIENTES_MAYORES_30;
 
 
+--Vista clientes id
+CREATE VIEW v_cliente_id AS
+SELECT id_cliente, nombre_cliente
+FROM CLIENTE_TB;
+select * from v_cliente_id
+
+
+
+
+
+--  Vistas de empleados
+CREATE VIEW v_empleado_id AS
+SELECT id_empleado, nombre_empleado
+FROM EMPLEADO_TB;
+select * from v_empleado_id
