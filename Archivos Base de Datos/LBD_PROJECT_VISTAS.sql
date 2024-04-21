@@ -1,5 +1,31 @@
 -- Archivo para crear las VISTAS que trajarán dentro de la DB
 
+--Vistas de Empleados
+CREATE OR REPLACE VIEW v_empleados_lista AS
+SELECT 
+    E.ID_EMPLEADO,
+    E.NOMBRE_EMPLEADO || ' ' || PRIMER_APELLIDO || ' ' || SEGUNDO_APELLIDO AS NOMBRE_COMPLETO,
+    E.NUMERO_CEDULA ,
+    E.EDAD,
+    E.TELEFONO,
+    E.EMAIL,
+    E.GENERO,
+    E.DIRECCION,
+    TO_CHAR(E.FECHA_CONTRATACION,'MM-DD-YYYY') FECHA_CONTRATACION,
+    P.NOMBRE_PUESTO,
+    P.SALARIO
+FROM 
+    EMPLEADO_TB E
+INNER JOIN PUESTO_TB P ON P.ID_PUESTO = E.ID_PUESTO;
+
+--Vistas de puestos
+CREATE OR REPLACE VIEW v_puestos_id AS
+SELECT 
+    ID_PUESTO,
+    NOMBRE_PUESTO 
+FROM 
+    puesto_tb ;
+SELECT * FROM v_puestos_id;
 
 --Vista de pedidos de proveedores
 CREATE OR REPLACE VIEW v_pedidos_proveedores AS
