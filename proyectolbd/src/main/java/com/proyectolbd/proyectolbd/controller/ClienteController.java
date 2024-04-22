@@ -88,7 +88,6 @@ public class ClienteController {
         
         cliente.actualizar(idCliente, nombre, primerApellido, segundoApellido, numeroCedula, edad, genero, idDireccion);
         return "redirect:/ListaClientes";
-    
     }
     
 }
