@@ -73,7 +73,6 @@ public class ClientesService {
     
     public void actualizar(int idCliente, String nombre_cliente, String primer_apellido, String segundo_apellido, int numero_cedula, int edad, String genero, int id_direccion)
     {
-        System.out.println("id cliente:    "+ idCliente);
         String query = "CALL ACTUALIZAR_CLIENTE(?, ?, ?, ?, ?, ?, ?, ?)";
         jdbc.update(query,
         idCliente,
