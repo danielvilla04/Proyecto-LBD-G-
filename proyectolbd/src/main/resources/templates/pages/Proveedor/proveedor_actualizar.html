@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+         
+                <section class="content container-fluid">
+                    <form th:action="@{/actualizar_proveedor}" method="post">
+                        <div class="form-group">
+                            <h2>Actualizar Cliente</h2>
+                            <form th:action="@{/actualizar_proveedor}" th:object="${orden}" method="post">
+                                 <div class="mb-3">
+                                    <label for="id_Proveedor" class="form-label">ID Proveedor</label>
+                                    <input type="number" class="form-control" id="id_Proveedor" name="idProveedor">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="contacto" class="form-label">Contacto</label>
+                                    <input type="text" class="form-control" id="contacto" name="contacto">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tipo_Proveedor" class="form-label">Tipo Proveedor</label>
+                                    <input type="text" class="form-control" id="tipo_Proveedor" name="tipoProveedor">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="id_direccion" class="form-label">ID Dirección</label>
+                                    <input type="number" class="form-control" id="id_direccion" name="idDireccion">
+                                </div>
+                                <button type="submit" class="btn btn-success">Actualizar Proveedor</button>
+                            </form>
+                        </div>
+                    </form>
+                    
+                    <!-- Mensaje de éxito (oculto por defecto) -->
+                    <div id="mensajeExito" style="display: none;">
+                        El cliente fue ingresado con éxito.
+                    </div>
+                    
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Obtener la URL actual
+            var path = window.location.pathname;
+
+            // Dividir la URL en partes utilizando "/" como separador
+            var partesPath = path.split("/");
+
+            // El ID estará en la última parte del path (si sigue la convención de /ruta/id)
+            var id = partesPath[partesPath.length - 1];
+            console.log(id)
+           $.ajax({
+                url: "/obtenerProveedor", // URL a la que enviar la solicitud
+                type: "POST", // Tipo de solicitud (GET, POST, etc.)
+                data: { id_Proveedor: id }, // Parámetros de la solicitud (opcional)
+                success: function(response) {
+                    // Función que se ejecuta cuando la solicitud tiene éxito
+                    console.log("Respuesta exitosa:", response);
+                    $("#id_Proveedor").val(response.id_Proveedor)
+                    $("#nombre").val(response.nombre)
+                    $("#contacto").val(response.contacto)
+                    $("#tipo_proveedor").val(response.tipo_proveedor)
+                    $("#id_Direccion").val(response.id_Direccion)();
+                },
+                error: function(xhr, status, error) {
+                    // Función que se ejecuta en caso de error
+                    console.error("Error en la solicitud:", error);
+                }
+            });
+        });
+        
+        function mostrarMensajeExito() {
+            var mensaje = document.getElementById("mensajeExito");
+            mensaje.style.display = "block"; // Muestra el mensaje
+        }
+    </script>
+
+</body>
+</html>

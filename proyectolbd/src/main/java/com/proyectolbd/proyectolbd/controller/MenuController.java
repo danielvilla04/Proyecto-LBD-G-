@@ -18,7 +18,9 @@ import com.proyectolbd.proyectolbd.modelo.Factura;
 import com.proyectolbd.proyectolbd.modelo.OrdenProveedor;
 import com.proyectolbd.proyectolbd.modelo.ventas.DetalleFactura;
 import com.proyectolbd.proyectolbd.modelo.ventas.DetalleOrdenProveedor;
+import com.proyectolbd.proyectolbd.servicio.ClientesService;
 import com.proyectolbd.proyectolbd.servicio.EmpleadoService;
+import com.proyectolbd.proyectolbd.servicio.ProveedorService;
 import com.proyectolbd.proyectolbd.servicio.ServiceMetodoPago;
 import com.proyectolbd.proyectolbd.servicio.VentaService;
 
@@ -29,10 +31,13 @@ public class MenuController {
    private ServiceMetodoPago metodoPago;
    @Autowired
    private EmpleadoService empleado;
-
    @Autowired
    private VentaService venta;
-
+   @Autowired
+   private ClientesService clientes;
+   @Autowired
+   private ProveedorService proveedor;
+   
    // Controler para los links del menu
    // Links de ventas
    @GetMapping("/facturacion")
@@ -74,7 +79,25 @@ public class MenuController {
 
    // Links de Clientes
 
+   @GetMapping("/clientes")
+   public String mostrarClientes(Model model) {
+      return "/pages/clientes/clientes_p";
+   }
+   
+   
+   
    //// Links de Proveedores
+   
+   @GetMapping("/proveedor")
+   public String mostrarProveedores(Model model) {
+      return "/pages/Proveedor/proveedor";
+   }
+   @GetMapping("/Lista_proveedor")
+   public String ListaProveedores(Model model) {
+      List<Map<String, Object>> proveedores = proveedor.obtenerVistaProveedor();
+      model.addAttribute("datosMetodos", proveedores);
+      return "/pages/Proveedor/proveedorLista";
+   }
    /*
     * @GetMapping("/pedido_proveedor")
     * public String mostrarPedidosProveedores(){return
