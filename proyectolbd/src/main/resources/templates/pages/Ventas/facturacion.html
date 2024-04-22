@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+
+
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Facturación</h3>
+                    <p class="text-subtitle text-muted">Crear nueva factura</p>
+                </div>
+
+                <section class="content container-fluid">
+                    <form id="formFactura" th:action="@{/crear_factura}" th:object="${factura}" method="post">
+                        
+                        <div class="row my-3 text-center">
+                            <div class="col-md-6 col-sm-12 p-0 ">
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white m-0">Cliente: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="selectCliente form-control w-85"
+                                            aria-label="Default select example" id="cliente" th:field="*{idCliente}" name="cliente">
+                                            <option value="0">Seleccione el cliente</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white m-0">Empleado: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="selectEmpleado form-select w-85"
+                                            aria-label="Default select example" id="selectEmpleado" th:field="*{idEmpleado}" name="empleado">
+                                            <option value="0">Seleccione el empleado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white m-0">Metodo de Pago: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="selectMetodoPago form-select w-85"
+                                            aria-label="Default select example" name="metodo" th:field="*{idMetodoPago}" id="metodo_pago">
+                                            <option value="0" selected>Seleccione el Metodo de Pago</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 col-sm-12 p-0 ">
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary  d-flex align-items-center">
+                                        <p class="text-white">Fecha de Facturación: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  d-flex align-items-center">
+                                        <input class="form-control" type="date" th:field="*{fechaFacturacion}" id="fecha_facturacion"
+                                            name="fecha_facturacion">
+                                    </div>
+                                </div>
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary d-flex align-items-center">
+                                        <p class="text-white">Estado de Factura: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  ">
+                                        <select class="form-select w-85" aria-label="Default select example" th:field="*{estado}" id="estado"
+                                            name="estado">
+                                            <option value="0">Estado de la Factura</option>
+                                            <option value="Cancelada">Cancelada</option>
+                                            <option value="Pendiente">Pendiente</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="row my-3 mx-2">
+                                    <div class="col-md-5 col-sm-6 bg-primary d-flex align-items-center">
+                                        <p class="text-white">Detalles: </p>
+                                    </div>
+                                    <div class="col-md-7 col-sm-6  d-flex align-items-center">
+                                        <input class="form-control" type="text" id="detalles" th:field="*{detalles}" name="detalles">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 p-0 mt-3 ">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cantidad</th>
+                                            <th>Código Artículo</th>
+                                            <th>Descripcion</th>
+                                            <th>Precio Unitario</th>
+                                            <th>Precio de Fila</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detalleTabla">
+                                        <tr id="fila1" th:each="objeto, status : *{detallesFac}">
+                                            <td class="px-2">
+                                                <input type="number" class=" cantidadProductos form-control w-50"  th:field="*{detallesFac[__${status.index}__].cantidadProductos}" name="cantidadProductos" id="cantidadProductos">
+                                            </td>
+                                            <td class="px-2">
+                                                <select class="selectProducto" style="width: 200px;" th:field="*{detallesFac[__${status.index}__].idProducto}"
+                                                th:id="'selectProducto_' + ${status.index}">
+                             
+                                                </select>
+                                            </td>
+                                            <td class="px-2">
+                                                <input type="text" class="form-control" 
+                                                    id="descripcion">
+                                            </td>
+                                            <td class="px-2">
+                                                <input type="number" class="precioFila form-control"  name="precioFila"
+                                                    id="precioFila">
+                                            </td>
+                                            <td class="px-2">
+                                                <input type="number" class="totalFila form-control" name="totalFila" th:field="*{detallesFac[__${status.index}__].totalFila}"
+                                                    id="totalFila">
+                                            </td>
+                                            <td class="px-2">
+                                                <button class="btn w-10" id="btnQuitarFila">X</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                         
+                            <div class="col-6 mt-3">
+                                <div class="row  my-2">
+                                    <div class="col-6 bg-primary text-white">Total: </div>
+                                    <div class="col-6 ">
+                                        <input type="number" id="total" th:field="*{total}" name="total">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <hr class="p-0">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" id="btnCrearFactura" type="submit">Crear
+                                        Factura</button>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+
+                </section>
+
+            </div>
+
+
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.selectProducto').select2();
+            $('.selectCliente').select2();
+            $('.selectEmpleado').select2();
+            $('.selectMetodoPago').select2();
+
+
+            $.get("/obtener_metodos_pago", function (data) {
+                var options = '';
+                $.each(data, function (index, metodoPago) {
+                    options += '<option value="' + metodoPago.idMetodoPago + '">'+ metodoPago.nombre + '</option>';
+                });
+                $('.selectMetodoPago').append(options);
+            });
+            $.get("/orden/obtener_productos", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, producto) {
+                    options += '<option value="' + producto.idProducto + '"> '+ producto.nombreProducto + '</option>';
+                });
+                $('.selectProducto').append(options);
+            });
+            $.get("/obtener_empleados", function (data) {
+                var options = '';
+                $.each(data, function (index, empleado) {
+                    options += '<option value="' + empleado.idEmpleado + '">'+ empleado.nombreEmpleado + '</option>';
+                });
+                $('.selectEmpleado').append(options);
+            });
+            $.get("/obtener_clientes", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, cliente) {
+                    options += '<option value="' + cliente.idCliente + '"> '+ cliente.nombreCliente + '</option>';
+                });
+                $('.selectCliente').append(options);
+            });
+            $.get("/obtener_productos", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, producto) {
+                    options += '<option value="' + producto.idProducto + '"> '+ producto.nombreProducto+ '</option>';
+                });
+                $('.selectProducto').append(options);
+            });
+        });
+
+
+ 
+        //quitar fila con boton
+        $(document).on('click', '#btnQuitarFila', function () {
+            $(this).closest('tr').remove();
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+    // Obtener todos los campos de cantidad y precioFila
+    var cantidadCampos = document.querySelectorAll(".cantidadProductos");
+    var precioCampos = document.querySelectorAll(".precioFila");
+
+    // Agregar evento change a cada campo de cantidad y precioFila
+    cantidadCampos.forEach(function(cantidadCampo) {
+        cantidadCampo.addEventListener("change", recalcularTotal);
+    });
+
+    precioCampos.forEach(function(precioCampo) {
+        precioCampo.addEventListener("change", recalcularTotal);
+    });
+
+    function recalcularTotal() {
+        var fila = this.closest("tr"); // Obtener la fila actual
+        var cantidad = parseFloat(fila.querySelector(".cantidadProductos").value);
+        var precio = parseFloat(fila.querySelector(".precioFila").value);
+        var total = cantidad * precio;
+        fila.querySelector(".totalFila").value = isNaN(total) ? '' : total.toFixed(2);
+
+        // Calcular y actualizar el total general
+        var totales = document.querySelectorAll(".totalFila");
+        var totalGeneral = 0;
+        totales.forEach(function(total) {
+            totalGeneral += parseFloat(total.value) || 0;
+        });
+        document.getElementById("total").value = totalGeneral.toFixed(2);
+    }
+});
+       
+
+    </script>
+
+</body>
+
+</html>

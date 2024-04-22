@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Ventas</h3>
+                    <p class="text-subtitle text-muted">Historial de Ventas</p>
+                </div>
+                <section class="section">
+                    <div class="container-fluid">
+                        <div class="row my-3">
+                            <div class="col-12 py-3 ">
+                                <button type="button" id="actualizarBtn" class="btn btn-info">Actualizar Ventas</button>
+                            </div>
+                            <div class="col-12 py-3">
+                                <table id="tablaVentas">
+                                    <thead>
+                                        <tr>
+                                            <!-- Asegúrate de ajustar los encabezados según tu esquema de base de datos -->
+                                            <th>Id Ventas</th>
+                                            <th>Id Factura</th>
+                                            <th>Fecha de la Venta</th>
+                                            <th>Total de la Venta</th>
+                                            <th>Acciones</th>
+
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tablaVentas').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "/ventas", // Ruta al endpoint del controlador que devuelve los datos de ventas
+                "columns": [
+                    { "data": "IDVENTA" },
+                    { "data": "IDFACTURA" },
+                    { "data": "FECHAVENTA" },
+                    { "data": "TOTALVENTA" },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return '<button class="btn btn-danger eliminar-btn" data-id="' + row.IDVENTA + '">Eliminar</button>';
+                        }
+                    },
+                    // Agrega más columnas según tus datos
+                ]
+            });
+            // Manejar el clic del botón
+            $("#actualizarBtn").click(function () {
+                // Realizar la solicitud POST al controlador
+                $.ajax({
+                    url: '/actualizar_ventas',
+                    type: 'POST',
+                    success: function (response) {
+                        $('#tablaVentas').DataTable().ajax.reload();
+                        console.log("La solicitud POST se realizó con éxito");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error al realizar la solicitud POST:", error);
+                    }
+                });
+            });
+
+
+        });
+
+        $('#tablaVentas').on('click', '.eliminar-btn', function () {
+            var idVenta = $(this).data('id');
+            eliminarVenta(idVenta);
+        });
+
+        function eliminarVenta(idVenta) {
+            $.ajax({
+                type: 'POST',
+                url: '/eliminar_venta/' + idVenta, // Ruta al endpoint del controlador para eliminar el registro
+                success: function (response) {
+                    // Actualizar la tabla después de eliminar el registro
+                    $('#tablaVentas').DataTable().ajax.reload();
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+
+
+    </script>
+
+</body>
+
+</html>

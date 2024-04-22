@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+
+
+<title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Pedidos de Clientes</h3>
+                        <p class="text-subtitle text-muted">Administración de Pedidos de Clientes</p>
+                </div>
+                <section class="section"> <!--Seccion dinamica-->
+
+                    <div class="row my-3">
+
+                        <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
+                            <p class="h4 m-3 text-center">Crear un Pedido</p>
+                            <form id="formPedido" th:action="@{/crear_pedido}" th:object="${pedidoCliente}" method="post">
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Cliente</label>
+                                    <select class="selectCliente form-control w-85" th:field="*{idCliente}" aria-label="Default select example"
+                                        id="cliente"  name="cliente">
+                                        <option value="0">Seleccione el cliente</option>
+
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Factura</label>
+                                    <select class="selectFactura form-select w-85" th:field="*{idFactura}" aria-label="Default select example"
+                                        id="selectFactura" name="selectFactura">
+                                        <option value=2>Seleccione la Factura</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Direccion</label>
+                                    <input type="text" class="form-control" id="direccion" th:field="*{direccion}" name="direccion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Estado Pedido</label>
+                                    <select class="selectEstado form-select w-85" th:field="*{estadoPedido}" aria-label="Default select example"
+                                        id="selectEstado" name="selectEstado">
+                                        <option value="Enviado">Enviado</option>
+                                        <option value="Recibido">Recibido</option>
+                                        <option value="Cancelado">Cancelado</option>
+
+                                    </select>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary text-center"
+                                    id="btnGuardar">Guardar</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+
+
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+
+
+        function eliminar(id_empleado) {
+            if (confirm("¿Estás seguro de que deseas eliminar este empleado?")) {
+                $.ajax({
+                    url: 'empleados/eliminar_empleado',
+                    type: 'POST',
+                    data: { id_empleado: id_empleado },
+                    success: function (data, textStatus, xhr) {
+                        // Recargar la página después de la eliminación exitosa
+                        console.log("aquiiiiii")
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+
+
+        $(document).ready(function () {
+            console.log('hola')
+          
+        
+            $('.selectCliente').select2();
+            $('.selectEstado').select2();
+            $('.selectFactura').select2();
+
+            $.get("/obtener_clientes", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, cliente) {
+                    options += '<option value="' + cliente.idCliente + '"> '+ cliente.nombreCliente + '</option>';
+                });
+                $('.selectCliente').append(options);
+            });
+            $.get("/obtener_facturas", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, factura) {
+                    options += '<option value="' + factura.idFactura + '"> # Factura:   ' + factura.idFactura + ' / Fecha: '+factura.fechaFacturacion+' / '+factura.estado+' </option>';
+                });
+                $('.selectFactura').append(options);
+            });
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>

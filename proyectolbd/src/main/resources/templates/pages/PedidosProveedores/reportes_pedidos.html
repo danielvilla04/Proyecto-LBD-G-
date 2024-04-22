@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Reporte de Pedidos a Proveedores</h3>
+                    <p class="text-subtitle text-muted">Pedidos por rango de mes</p>
+                </div>
+                <section class="section">
+                    <div class="row">
+                        <div class="col-12">
+                            <form th:action="@{/orden/obtener_pedidos_reportes}" th:object="${fechasForm}" method="post">
+                                <label for="fechaInicio">Fecha de Inicio:</label>
+                                <input class="form-control" type="date" id="fechaInicio" th:field="*{fechaInicio}"
+                                    required><br>
+
+                                <label for="fechaFin">Fecha de Fin:</label>
+                                <input class="form-control" type="date" id="fechaFin" th:field="*{fechaFin}"
+                                    required><br>
+
+                                <button class="btn btn-primary" type="submit">Buscar Pedidos</button>
+                            </form>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <table class=" mt-4 display" id="tablaOrdenes">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Id Ordenes</th>
+                                        <th scope="col">Detalles</th>
+                                        <th scope="col">Fecha Pedido</th>
+                                        <th scope="col">Fecha Estimada Pedido</th>
+
+
+
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="pedido : ${pedidos}">
+                                        <td th:text="${pedido['idOrdenProveedor']}"></td>
+                                        <td th:text="${pedido['detalles']}"></td>
+                                        <td th:text="${pedido['fechaPedido']}"></td>
+                                        <td th:text="${pedido['fechaEstimadaFin']}"></td>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            console.log('hola')
+            $('#tablaOrdenes').DataTable();
+        }
+        )
+    </script>
+
+</body>
+
+</html>

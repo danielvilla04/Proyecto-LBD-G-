@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="sidebar" class='active' th:fragment="sidebar" style="overflow-y: scroll;"><!--sidebar-->
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-menu">
+                <ul class="menu">
+
+
+                    <li class='sidebar-title'>Main Menu</li>
+
+
+
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="triangle" width="20"></i>
+                            <span>Ventas</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="facturacion">Facturacion</a>
+                            </li>
+                            <li>
+                                <a href="facturas">Gestión de Facturas</a>
+                            </li>
+
+                            <li>
+                                <a href="historial_ventas">Historial Ventas</a>
+                            </li>
+
+                            <li>
+                                <a href="metodos_pago">Metodos Pago</a>
+                            </li>
+                            <li>
+                                <a href="reportes_ventas">Reportes de Ventas</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="shopping-bag" width="20"></i>
+                            <span>Inventario</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="component-extra-avatar.html">Avatar</a>
+                            </li>
+
+                            <li>
+                                <a href="component-extra-divider.html">Divider</a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="briefcase" width="20"></i>
+                            <span>Pedidos de Clientes</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="pedidos_gestion">Crear un Pedidos de Cliente</a>
+                            </li>
+                            <li>
+                                <a href="pedidos_gestion_lista">Ver de Pedidos de Clientes</a>
+                            </li>
+
+
+
+                        </ul>
+
+                    </li>
+
+
+
+
+
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="briefcase" width="20"></i>
+                            <span>Pedidos de Proveedores</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="pedido_proveedor">Nuevo Pedido de Proveedor</a>
+                            </li>
+
+                            <li>
+                                <a href="pedido_proveedor_lista">Ver Pedidos de Proveedores</a>
+                            </li>
+
+                            <li>
+                                <a href="reportes_pedidos">Reportes de Pedidos de Proveedores</a>
+                            </li>
+
+
+
+                        </ul>
+
+                    </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="users" width="20"></i>
+                            <span>Clientes</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="clientes">Administracion de Clientes</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="users" width="20"></i>
+                            <span>Proveedores</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="proveedores">Craer de Proveedores</a>
+                            </li>
+                            <li>
+                                <a href="proveedores_lista">Administracion de Proveedores</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="users" width="20"></i>
+                            <span>Empleados</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="empleados">Administracion de Empleados</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="user" width="20"></i>
+                            <span>Usuarios</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="usuarios">Crear Empleado</a>
+                            </li>
+                            <li>
+                                <a href="usuarios_administracion">Administracion de Usuarios</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+                </ul>
+            </div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+</body>
+
+</html>

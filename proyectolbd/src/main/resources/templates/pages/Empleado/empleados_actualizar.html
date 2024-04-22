@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+
+
+<title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Empleados</h3>
+                    <p class="text-subtitle text-muted">Administración de Empleados</p>
+                </div>
+                <section class="section"> <!--Seccion dinamica-->
+
+                        <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
+                            <p class="h4 m-3 text-center">Actualizar Empleado</p>
+                            <form method="post" th:action="@{/empleados/actualizar_empleado}" th:object="${empleado}" enctype="application/json" id="empleadosForm">
+                                <input type="hidden" th:value="${empleado.idEmpleado}" th:field="*{idEmpleado}">
+                                <div class="mb-3">
+                                    <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" th:value="${empleado.nombreEmpleado}" th:field="*{nombreEmpleado}" id="nombreEmpleado" name="nombreEmpleado">
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Primer Apellido</label>
+                                    <input type="text" class="form-control" th:value="${empleado.primerApellido}"  th:field="*{primerApellido}" id="primerApellido" name="primerApellido">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Segundo Apellido</label>
+                                    <input type="text" class="form-control" th:value="${empleado.segundoApellido}"  th:field="*{segundoApellido}" id="segundoApellido" name="segundoApellido">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Numero Cedula</label>
+                                    <input type="text" class="form-control" th:value="${empleado.numeroCedula}"  th:field="*{numeroCedula}" id="cedula" name="cedula">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Edad</label>
+                                    <input type="number" class="form-control" th:value="${empleado.edad}"  th:field="*{edad}" id="edad" name="edad">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Genero</label>
+                                    <input type="text" class="form-control" th:value="${empleado.genero}"  th:field="*{genero}" id="genero" name="genero">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Direccion</label>
+                                    <input type="text" class="form-control" th:value="${empleado.detalleDireccion}"  th:field="*{detalleDireccion}" id="direccion" maxlength="50"
+                                        name="direccion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Fecha Contratacion</label>
+                                    <input type="date" class="form-control" th:value="${empleado.fechaContratacion}"  th:field="*{fechaContratacion}" id="fechaContratacion"
+                                        name="fechaContratacion">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="puesto" class="form-label">Puesto</label>
+                                    <select class="selectPuestos form-control w-85" th:value="${empleado.idPuesto}"  th:field="*{idPuesto}" aria-label="Default select example"
+                                        id="puesto" name="puesto" required>
+                                        <option value="1">Seleccione el Puesto</option>
+
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Telefono</label>
+                                    <input type="String" class="form-control" th:value="${empleado.telefono}"  th:field="*{telefono}" id="telefono" name="telefono">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreMetodoPago" class="form-label">Email</label>
+                                    <input type="email" class="form-control" th:value="${empleado.email}"  th:field="*{email}" id="email" name="email">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary text-center"
+                                    id="btnGuardar">Actualizar</button>
+                            </form>
+                        </div>
+
+                      
+
+                    </div>
+
+
+
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+
+
+    
+
+        $(document).ready(function () {
+            
+
+            
+        $.get("/empleados/obtener_puestos", function(data) {
+            var options = '';
+            $.each(data, function(index, puesto) {
+                options += '<option value="' + puesto.idPuesto + '">' + puesto.nombrePuesto + '</option>';
+            });
+            $('.selectPuestos').append(options);
+        });
+    
+        
+        });
+
+
+        // Función para abrir el modal y cargar los datos del empleado
+        // Función para abrir el modal y cargar los datos del empleado
+        /*function abrirModalActualizar(idEmpleado) {
+            // Realizar una petición AJAX para obtener los datos del empleado
+            $.ajax({
+                url: '/empleados/listar/' + idEmpleado, // URL del endpoint que devuelve los datos del empleado por su ID
+                type: 'GET',
+                success: function (response) {
+                    // Una vez obtenidos los datos del empleado, los cargamos en el formulario
+                    $('#nombreEmpleadoUpdate').val(response.nombre);
+                    $('#primerApellidoUpdate').val(response.primerApellido);
+                    $('#segundoApellidoUpdate').val(response.segundoApellido);
+                    $('#cedulaUpdate').val(response.numeroCedula);
+                    $('#edadUpdate').val(response.edad);
+                    $('#generoUpdate').val(response.genero);
+                    $('#direccionUpdate').val(response.direccion);
+                    $('#fechaContratacionUpdate').val(response.fechaContratacion);
+                    $('#puestoUpdate').val(response.puesto);
+                    $('#telefonoUpdate').val(response.telefono);
+                    $('#emailUpdate').val(response.email);
+
+                    // Abrir el modal
+                    $('#modalActualizarEmpleado').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error al obtener los datos del empleado:', error);
+                }
+            });
+        }*/
+
+
+       
+
+
+    </script>
+
+
+</body>
+
+</html>

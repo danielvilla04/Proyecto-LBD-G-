@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+ 
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Facturas</h3>
+                    <p class="text-subtitle text-muted">Gestion de Facturas</p>
+                </div>
+                <section class="section">
+                    <div class="container-fluid">
+                        <div class="row my-3">
+                            <div class="col-12 py-3 " style="overflow: scroll;">
+                                <table class="display" id="tablaFacturas">
+                                    <thead>
+                                        <tr>
+                                            <!-- Asegúrate de ajustar los encabezados según tu esquema de base de datos -->
+                                            <th>Id Factura</th>
+                                            <th>Cliente</th>
+                                            <th>Empleado</th>
+                                            <th>Metodo Pago</th>
+                                            <th>Estado</th>
+                                            <th>Fecha Facturacion</th>
+                                            <th>Total</th>
+                                            <th>Cambiar Estado</th>
+
+                                
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr >
+                                            <tr th:each="factura : ${facturas}">
+                                                <td th:text="${factura['id_factura']}"></td>
+                                                <td th:text="${factura['nombre_cliente']}"></td>
+                                                <td th:text="${factura['nombre_empleado']}"></td>
+                                                <td th:text="${factura['nombre_metodo_pago']}"></td>
+                                                <td th:text="${factura['estado']}">
+                                                    
+                                                </td>
+                                                <td th:text="${factura['fecha_facturacion']}"></td>
+                                                <td th:text="${factura['total']}"></td>
+                                            
+                                                <td>
+                                                    <button class="btn btn-danger "
+                                                        th:onclick="'cambiarEstado(\'' + ${factura.id_factura} + '\')'">
+                                                        Cambiar Estado</button>
+                                                </td>
+                                          
+                                                
+                                            </tr>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            console.log('hola')
+            $('#tablaFacturas').DataTable();
+        }
+        )
+
+        function cambiarEstado(id_factura) {
+            if (confirm("¿Estás seguro de que deseas cambiar el estado de la factura?")) {
+                $.ajax({
+                    url: '/cambiar_estado_factura',
+                    type: 'POST',
+                    data: { id_factura: id_factura },
+                    success: function (data, textStatus, xhr) {
+                        // Recargar la página después de la eliminación exitosa
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<%@ import="java.util.*" %>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pedidos Proveedores</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+        <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+        <link rel="stylesheet" th:href="@{/css/app.css}">
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    </head>
+
+    <body>
+
+        <div id="app"><!--Main Content-->
+            <div th:replace="fragments/sidebar :: sidebar"></div>
+            <div id="main"><!--Content-->
+
+
+                <nav th:replace="fragments/header :: header"></nav>
+                <div class="main-content container-fluid" th:fragment="contenido">
+                    <!--layout:fragment="content"Dinamic Content-->
+                    <div class="page-title">
+                        <h3>Pedidos Clientes</h3>
+                        <p class="text-subtitle text-muted">Crear nuevo pedido</p>
+                    </div>
+
+                    <section class="content container-fluid">
+                        <form th:action="@{/orden/crear_orden}" th:object="${orden}" method="post"> 
+                            <div class="form-group">
+                                <label for="detalles">Proveedor:</label>
+                                <select class="selectProveedor form-control w-85" th:field="*{idProveedor}" required
+                                    aria-label="Default select example" id="selectProveedor">
+                                    <option value=0>Seleccione un Proveedor</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="detalles">Detalles:</label>
+                                <input type="text" class="form-control" th:field="*{detalles}" id="detalles" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaPedido">Fecha de Pedido:</label>
+                                <input type="date" class="form-control" id="fechaPedido" th:field="*{fechaPedido}"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaEstimadaFin">Fecha Estimada de Fin:</label>
+                                <input type="date" class="form-control" id="fechaEstimadaFin"
+                                    th:field="*{fechaEstimadaFin}" required>
+                            </div>
+                            <hr>
+                            <h3>Detalles de la Orden:</h3>
+                            <div class="detalle-container">
+                                <div class=" row detalle-row" th:each="objeto, status : *{detalles_prov}">
+                                    <div class="col-6 form-group">
+                                        <label for="fechaEstimadaFin">Producto</label>
+                                        <select class="selectProducto form-control w-85"
+                                            th:field="*{detalles_prov[__${status.index}__].idProducto}" required
+                                            aria-label="Default select example"  th:id="'selectProducto_' + ${status.index}">
+                                            <option value="0" selected>Seleccione un producto</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-6 form-group">
+                                        <label for="fechaEstimadaFin">Cantidad</label>
+                                        <input type="number" class="form-control"
+                                            th:field="*{detalles_prov[__${status.index}__].cantidad}" />
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+
+                            <br><br>
+                            <button type="submit" class="btn btn-success">Crear Orden</button>
+                        </form>
+
+
+                    </section>
+
+                </div>
+
+
+                <footer th:replace="fragments/footer :: footer"></footer>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script th:src="@{/js/feather.min.js}"></script>
+        <script th:src="@{/js/app.js}"></script>
+
+        <script th:src="@{/js/main.js}"></script>
+
+        <script >
+
+            $(document).ready(function () {
+            $('.selectProducto').select2();
+            $('.selectProveedor').select2();
+
+
+
+            $.get("/orden/obtener_productos", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, producto) {
+                    options += '<option value="' + producto.idProducto + '"> '+ producto.nombreProducto + '</option>';
+                });
+                $('.selectProducto').append(options);
+            });
+            $.get("/orden/obtener_proveedor", function (data) {
+                console.log('aqui')
+                var options = '';
+                $.each(data, function (index, proveedor) {
+                    options += '<option value="' + proveedor.idProveedor + '"> '+ proveedor.nombreEmpresa + '</option>';
+                });
+                $('.selectProveedor').append(options);
+            });
+        });
+        </script>
+
+
+
+
+    </body>
+
+
+    </html>

@@ -200,4 +200,84 @@ EXCEPTION
     WHEN NO_DATA_FOUND THEN
         RETURN 0; -- Retorna 0 si no se encuentra ning?n registro
 END VERIFICAR_CATEGORIA_ACTIVA;
+
+
+
+
+-------------------------------------------
+------Mis funciones
+
+
+/*CalcularTotalFactura: Esta función calcularía el total de una factura basada en 
+los precios de los productos y la cantidad comprada.
+*/
+
+CREATE OR REPLACE FUNCTION CalcularTotalFactura(
+    p_numero_factura IN NUMBER
+) RETURN NUMBER IS
+    v_total NUMBER := 0;
+BEGIN
+    SELECT SUM(precio * cantidad)
+    INTO v_total
+    FROM detalle_factura
+    WHERE numero_factura = p_numero_factura;
+    RETURN v_total;
+END CalcularTotalFactura;
+/*
+ObtenerProveedorProducto: Esta función devolvería el proveedor de un producto específico.*/
+
+
+CREATE OR REPLACE FUNCTION ObtenerProveedorProducto(
+    p_codigo_producto IN VARCHAR2
+) RETURN VARCHAR2 IS
+    v_proveedor VARCHAR2(100);
+BEGIN
+    SELECT proveedor
+    INTO v_proveedor
+    FROM productos
+    WHERE codigo_producto = p_codigo_producto;
+    RETURN v_proveedor;
+END ObtenerProveedorProducto;
+
+
+/*ActualizarStockProducto: Esta función actualizaría el stock de un producto después de que se haya realizado un pedido.*/
+
+
+CREATE OR REPLACE FUNCTION ActualizarStockProducto(
+    p_codigo_producto IN VARCHAR2,
+    p_cantidad IN NUMBER
+) RETURN NUMBER IS
+BEGIN
+    UPDATE productos
+    SET stock = stock - p_cantidad
+    WHERE codigo_producto = p_codigo_producto;
+    RETURN SQL%ROWCOUNT;
+END ActualizarStockProducto;
+
+
+/*GenerarNumeroPedido: Esta función generarías un número de pedido único para cada pedido realizado.*/
+
+CREATE OR REPLACE FUNCTION GenerarNumeroPedido RETURN NUMBER IS
+    v_numero_pedido NUMBER;
+BEGIN
+    SELECT SEQ_NUM_PEDIDO.NEXTVAL INTO v_numero_pedido FROM DUAL;
+    RETURN v_numero_pedido;
+END GenerarNumeroPedido;
+
+
+/*CalcularTotalPedidoProveedor: Esta función calcularía el total de un pedido de
+un proveedor basado en los precios de los productos y la cantidad pedida.*/
+
+
+CREATE OR REPLACE FUNCTION CalcularTotalPedidoProveedor(
+    p_numero_pedido IN NUMBER
+) RETURN NUMBER IS
+    v_total NUMBER := 0;
+BEGIN
+    SELECT SUM(precio * cantidad)
+    INTO v_total
+    FROM detalle_pedido
+    WHERE numero_pedido = p_numero_pedido;
+    RETURN v_total;
+END CalcularTotalPedidoProveedor;
  
