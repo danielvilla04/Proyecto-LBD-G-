@@ -37,6 +37,12 @@ CREATE OR REPLACE PACKAGE PEDIDOS_PROVEEDORES_PKG AS
         p_id_detalle_orden IN NUMBER
     );
     
+    PROCEDURE obtener_ordenes_por_rango(
+        fecha_inicio IN DATE,
+        fecha_fin IN DATE,
+        ordenes OUT SYS_REFCURSOR
+    );
+    
 END PEDIDOS_PROVEEDORES_PKG;
     
 CREATE OR REPLACE PACKAGE BODY PEDIDOS_PROVEEDORES_PKG AS
@@ -140,7 +146,19 @@ END INSERTAR_ORDEN_PROVEEDOR;
         DELETE FROM DETALLE_ORDEN_PROVEEDOR_TB
         WHERE ID_DETALLE_ORDEN = p_id_detalle_orden;
         COMMIT;
-    END ELIMINAR_DETALLE_ORDEN_PROVEEDOR;
+    END ;
+    
+    PROCEDURE obtener_ordenes_por_rango(
+        fecha_inicio IN DATE,
+        fecha_fin IN DATE,
+        ordenes OUT SYS_REFCURSOR
+    )
+    AS
+    BEGIN
+        OPEN ordenes FOR
+        SELECT * FROM ORDEN_PROVEEDOR_TB
+        WHERE fecha_pedido BETWEEN fecha_inicio AND fecha_fin;
+    END;
     
 END PEDIDOS_PROVEEDORES_PKG;
 

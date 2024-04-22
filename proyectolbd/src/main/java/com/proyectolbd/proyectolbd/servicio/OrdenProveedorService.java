@@ -1,7 +1,12 @@
 package com.proyectolbd.proyectolbd.servicio;
 
 import java.math.BigDecimal;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 import com.proyectolbd.proyectolbd.modelo.OrdenProveedor;
 import com.proyectolbd.proyectolbd.modelo.ProductoTb;
 import com.proyectolbd.proyectolbd.modelo.ProveedorTb;
+import com.proyectolbd.proyectolbd.modelo.Venta;
 import com.proyectolbd.proyectolbd.modelo.ventas.DetalleOrdenProveedor;
 
 @Service
@@ -95,6 +101,44 @@ public class OrdenProveedorService {
     public List<Map<String, Object>> obtenerPedidos() {
         String sql = "SELECT * FROM v_pedidos_proveedores "; //
         return jdbc.queryForList(sql);
+    }
+
+    public List<OrdenProveedor> obtenerOrdenesPorRango(java.sql.Date fechaInicio, java.sql.Date fechaFin) {
+        List<OrdenProveedor> ordenes = new ArrayList<>();
+        try {
+            // Establecer la conexión con la base de datos Oracle
+            Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "DANIEL_PROJECT", "12345");
+
+            // Llamar al procedimiento almacenado
+            CallableStatement cs = conn.prepareCall("{call PEDIDOS_PROVEEDORES_PKG.obtener_ordenes_por_rango(?, ?, ?)}");
+            cs.setDate(1, fechaInicio);
+            cs.setDate(2, fechaFin);
+            cs.registerOutParameter(3, oracle.jdbc.OracleTypes.CURSOR); // Tipo específico para Oracle
+            cs.execute();
+
+            // Obtener el cursor
+            ResultSet rs = (ResultSet) cs.getObject(3);
+
+            // Iterar sobre los resultados y crear objetos Venta
+            while (rs.next()) {
+                OrdenProveedor orden = new OrdenProveedor();
+                orden.setIdOrdenProveedor(rs.getInt("id_orden_proveedor"));
+                orden.setDetalles(rs.getString("detalles"));
+                orden.setFechaPedido(rs.getDate("fecha_pedido"));
+                orden.setFechaEstimadaFin(rs.getDate("fecha_estimada_fin"));
+
+                ordenes.add(orden);
+            }
+
+
+            // Cerrar los recursos
+            rs.close();
+            cs.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ordenes;
     }
 }
 

@@ -14,7 +14,7 @@ public class ProveedorTb {
 
     private String tipoProveedor;
 
-    private int direccion;
+    private String direccion;
 
     
 
@@ -24,7 +24,7 @@ public ProveedorTb() {
 
 
 
-public ProveedorTb(int idProveedor, String nombreEmpresa, String personaContacto, String tipoProveedor, int direccion) {
+public ProveedorTb(int idProveedor, String nombreEmpresa, String personaContacto, String tipoProveedor, String direccion) {
     this.idProveedor = idProveedor;
     this.nombreEmpresa = nombreEmpresa;
     this.personaContacto = personaContacto;
@@ -82,13 +82,13 @@ public void setTipoProveedor(String tipoProveedor) {
 
 
 
-public int getDireccion() {
+public String getDireccion() {
     return direccion;
 }
 
 
 
-public void setDireccion(int direccion) {
+public void setDireccion(String direccion) {
     this.direccion = direccion;
 }
 

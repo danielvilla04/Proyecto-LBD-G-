@@ -9,6 +9,8 @@ public class Factura {
 
     private int idFactura;
     private int idCliente;
+    private String nombreCliente;
+    private String nombreEmpleado;
     private int idEmpleado;
     private int idMetodoPago;
     private String detalles;
@@ -24,7 +26,7 @@ public class Factura {
 
 
     public Factura(int idFactura, int idCliente, int idEmpleado, int idMetodoPago, String detalles, String estado,
-            Date fechaFacturacion, double  total,List<DetalleFactura> detallesFac) {
+            Date fechaFacturacion, double  total,List<DetalleFactura> detallesFac, String nombreEmpleado,String nombreCliente) {
         this.idFactura = idFactura;
         this.idCliente = idCliente;
         this.idEmpleado = idEmpleado;
@@ -34,6 +36,28 @@ public class Factura {
         this.fechaFacturacion = fechaFacturacion;
         this.total = total;
         this.detallesFac = detallesFac;
+        this.nombreCliente = nombreCliente;
+        this.nombreEmpleado = nombreEmpleado;
+    }
+
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
     }
 
 

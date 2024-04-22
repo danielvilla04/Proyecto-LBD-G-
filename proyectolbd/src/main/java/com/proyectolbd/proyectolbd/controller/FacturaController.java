@@ -58,4 +58,17 @@ public class FacturaController {
         return facturaService.obtenerEmpleados();
     }
 
+    @PostMapping("/cambiar_estado_factura")
+    public String cambiarEstado(@RequestParam("id_factura") int id) {
+       
+        facturaService.cambiarEstadoFactura(id);
+        return "redirect:/facturas";
+    }
+
+    @GetMapping("/obtener_facturas")
+    @ResponseBody
+    public List<Factura> obtenerFacturas() {
+        return facturaService.obtenerFacturas();
+    }
+
 }

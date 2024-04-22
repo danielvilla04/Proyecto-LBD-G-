@@ -5,17 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
-
-
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class LoginController {
 
-     @RequestMapping("/home")
-     public String loginSubmit(){return "/pages/home";}
+//    @RequestMapping("/login")
+//    public String loginPage(){
+//        return "/auth_login";
+//    }
 
-     @RequestMapping("/login")
-     public String login(){return "auth-login";}
-     
-     
+    @RequestMapping("/login")
+    public String loginSubmit1(){
+        return "/pages/home";
+    }
+
 }

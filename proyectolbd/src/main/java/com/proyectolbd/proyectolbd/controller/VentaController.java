@@ -1,5 +1,6 @@
 package com.proyectolbd.proyectolbd.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,17 +8,20 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.proyectolbd.proyectolbd.modelo.FechasForm;
 import com.proyectolbd.proyectolbd.modelo.Venta;
 import com.proyectolbd.proyectolbd.servicio.VentaService;
 
-import ch.qos.logback.core.model.Model;
 
-@RestController
+
+@Controller
 public class VentaController {
 
     @Autowired
@@ -48,9 +52,17 @@ public class VentaController {
     }
 
     @PostMapping("/actualizar_ventas")
-    public void actualizarVentas() {
+    public String actualizarVentas() {
         venta.actualizarVentas();
-     
+        return "pages/Ventas/historial_ventas";
     }
 
+    
+    @PostMapping("/obtener_ventas_rango")
+    public String obtenerVentasRango(@ModelAttribute FechasForm fechas , Model model ) {
+
+           List<Venta> ventas = venta.obtenerVentasPorRango(fechas.getFechaInicio(), fechas.getFechaFin());
+           model.addAttribute("ventas", ventas);
+           return "pages/Ventas/reportes_ventas"; // Esto es el nombre de la vista Thymeleaf
+    }
 }

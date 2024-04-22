@@ -101,5 +101,27 @@ public class FacturaService {
         });
     }
 
+    public List<Factura> obtenerFacturas() {
+        String sql = "select * from v_factura_id"; 
+        return jdbc.query(sql, (rs, rowNum) -> {
+            Factura factura = new Factura();
+            factura.setIdFactura(rs.getInt("id_factura"));
+            factura.setFechaFacturacion(rs.getDate("fecha_facturacion"));
+            factura.setEstado(rs.getString("estado"));
+
+            return factura;
+        });
+    }
+
+    public List<Map<String, Object>> obtenerVistaFacturas() {
+        String sql = "SELECT * FROM vista_facturas"; 
+        return jdbc.queryForList(sql);
+    }
+
+    public void cambiarEstadoFactura(int idFactura){
+        String sql = "CALL facturacion.CAMBIAR_ESTADO_FACTURA(?)";
+        jdbc.update(sql, idFactura);
+    } 
+
  
 }

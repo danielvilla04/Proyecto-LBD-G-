@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+
+
+<title>Document</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Proveedores</h3>
+                    <p class="text-subtitle text-muted">Administración de Proveedor</p>
+                </div>
+                <section class="section"> <!--Seccion dinamica-->
+
+                        <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
+                            <p class="h4 m-3 text-center">Actualizar Usuario</p>
+                            <form method="post" th:action="@{/proveedor_actualizar}" th:object="${proveedor}" enctype="application/json" id="usuariosForm">
+                                <input  type="hidden" th:value="${proveedor.idProveedor}" th:field="*{idProveedor}">
+                                <div class="row">
+                            
+
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="username-column">Nombre Empresa</label>
+                                            <input type="text" id="username-column" th:value="${proveedor.nombreEmpresa}" th:field="*{nombreEmpresa}" class="form-control" name="username-column">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="country-floating">Persona Contacto</label>
+                                            <input type="text" th:field="*{personaContacto}" th:value="${proveedor.personaContacto}" id="country-floating" class="form-control" name="country-floating">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="company-column">Tipo Proveedor</label>
+                                            <select class="selectUser form-control w-85"  required th:field="*{tipoProveedor}" th:value="${proveedor.tipoProveedor}"
+                                            aria-label="Default select example" id="selectUser">
+                                            <option value="Overlanding">Overlanding</option>
+                                            <option value="OffRoad">OffRoad</option>
+                                            <option value="Repuestos">Repuestos</option>
+                                            <option value="Alógenos">Alógenos</option>
+
+        
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="email-id-column">Direccion</label>
+                                            <input type="checkbox" id="enable" class="" name="enable"  th:field="*{direccion}" th:value="${proveedor.direccion}">  
+                                        </div>
+                                    </div>
+                                </diV>
+        
+                                      
+                                <div class="clearfix">
+                                    <button type="submit" class="btn btn-primary float-end">Actualizar Proveedor</button>
+                                </div>
+                            </form>
+                        </div>
+
+                      
+
+                    </div>
+
+
+
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+
+
+    
+
+        $(document).ready(function () {
+            
+
+            
+        $.get("/empleados/obtener_puestos", function(data) {
+            var options = '';
+            $.each(data, function(index, puesto) {
+                options += '<option value="' + puesto.idPuesto + '">' + puesto.nombrePuesto + '</option>';
+            });
+            $('.selectPuestos').append(options);
+        });
+    
+        
+        });
+
+
+        // Función para abrir el modal y cargar los datos del empleado
+        // Función para abrir el modal y cargar los datos del empleado
+        /*function abrirModalActualizar(idEmpleado) {
+            // Realizar una petición AJAX para obtener los datos del empleado
+            $.ajax({
+                url: '/empleados/listar/' + idEmpleado, // URL del endpoint que devuelve los datos del empleado por su ID
+                type: 'GET',
+                success: function (response) {
+                    // Una vez obtenidos los datos del empleado, los cargamos en el formulario
+                    $('#nombreEmpleadoUpdate').val(response.nombre);
+                    $('#primerApellidoUpdate').val(response.primerApellido);
+                    $('#segundoApellidoUpdate').val(response.segundoApellido);
+                    $('#cedulaUpdate').val(response.numeroCedula);
+                    $('#edadUpdate').val(response.edad);
+                    $('#generoUpdate').val(response.genero);
+                    $('#direccionUpdate').val(response.direccion);
+                    $('#fechaContratacionUpdate').val(response.fechaContratacion);
+                    $('#puestoUpdate').val(response.puesto);
+                    $('#telefonoUpdate').val(response.telefono);
+                    $('#emailUpdate').val(response.email);
+
+                    // Abrir el modal
+                    $('#modalActualizarEmpleado').modal('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error al obtener los datos del empleado:', error);
+                }
+            });
+        }*/
+
+
+       
+
+
+    </script>
+
+
+</body>
+
+</html>

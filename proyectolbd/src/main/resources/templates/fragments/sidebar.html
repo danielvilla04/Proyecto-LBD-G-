@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    
-    <div id="sidebar" class='active' th:fragment="sidebar"><!--sidebar-->
+
+    <div id="sidebar" class='active' th:fragment="sidebar" style="overflow-y: scroll;"><!--sidebar-->
         <div class="sidebar-wrapper active">
-            <div class="sidebar-header">
-                <img th:src="@{/images/logo.svg}" alt="" srcset="">
-            </div>
             <div class="sidebar-menu">
                 <ul class="menu">
 
@@ -34,6 +32,9 @@ xmlns:th="http://www.thymeleaf.org">
                             <li>
                                 <a href="facturacion">Facturacion</a>
                             </li>
+                            <li>
+                                <a href="facturas">Gestión de Facturas</a>
+                            </li>
 
                             <li>
                                 <a href="historial_ventas">Historial Ventas</a>
@@ -50,85 +51,10 @@ xmlns:th="http://www.thymeleaf.org">
                         </ul>
 
                     </li>
-
-
-
                     <li class="sidebar-item  has-sub">
 
                         <a href="#" class='sidebar-link'>
-                            <i data-feather="triangle" width="20"></i>
-                            <span>Pedidos de Clientes</span>
-                        </a>
-
-
-                        <ul class="submenu ">
-
-                            <li>
-                                <a href="component-alert.html">Alert</a>
-                            </li>
-
-                            <li>
-                                <a href="component-badge.html">Badge</a>
-                            </li>
-
-                            <li>
-                                <a href="component-breadcrumb.html">Breadcrumb</a>
-                            </li>
-
-                            <li>
-                                <a href="component-buttons.html">Buttons</a>
-                            </li>
-
-                            <li>
-                                <a href="component-card.html">Card</a>
-                            </li>
-
-                            <li>
-                                <a href="component-carousel.html">Carousel</a>
-                            </li>
-
-                            <li>
-                                <a href="component-dropdowns.html">Dropdowns</a>
-                            </li>
-
-                            <li>
-                                <a href="component-list-group.html">List Group</a>
-                            </li>
-
-                            <li>
-                                <a href="component-modal.html">Modal</a>
-                            </li>
-
-                            <li>
-                                <a href="component-navs.html">Navs</a>
-                            </li>
-
-                            <li>
-                                <a href="component-pagination.html">Pagination</a>
-                            </li>
-
-                            <li>
-                                <a href="component-progress.html">Progress</a>
-                            </li>
-
-                            <li>
-                                <a href="component-spinners.html">Spinners</a>
-                            </li>
-
-                            <li>
-                                <a href="component-tooltips.html">Tooltips</a>
-                            </li>
-
-                        </ul>
-
-                    </li>
-
-
-
-                    <li class="sidebar-item  has-sub">
-
-                        <a href="#" class='sidebar-link'>
-                            <i data-feather="briefcase" width="20"></i>
+                            <i data-feather="shopping-bag" width="20"></i>
                             <span>Inventario</span>
                         </a>
 
@@ -146,6 +72,34 @@ xmlns:th="http://www.thymeleaf.org">
                         </ul>
 
                     </li>
+
+
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="briefcase" width="20"></i>
+                            <span>Pedidos de Clientes</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="pedidos_gestion">Crear un Pedidos de Cliente</a>
+                            </li>
+                            <li>
+                                <a href="pedidos_gestion_lista">Ver de Pedidos de Clientes</a>
+                            </li>
+
+
+
+                        </ul>
+
+                    </li>
+
+
+
+
 
                     <li class="sidebar-item  has-sub">
 
@@ -166,8 +120,10 @@ xmlns:th="http://www.thymeleaf.org">
                             </li>
 
                             <li>
-                                <a href="reportes_ventas">Reportes de Pedidos de Proveedores</a>
+                                <a href="reportes_pedidos">Reportes de Pedidos de Proveedores</a>
                             </li>
+
+
 
                         </ul>
 
@@ -175,7 +131,46 @@ xmlns:th="http://www.thymeleaf.org">
                     <li class="sidebar-item  has-sub">
 
                         <a href="#" class='sidebar-link'>
-                            <i data-feather="briefcase" width="20"></i>
+                            <i data-feather="users" width="20"></i>
+                            <span>Clientes</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="clientes">Administracion de Clientes</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="users" width="20"></i>
+                            <span>Proveedores</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="proveedores">Craer de Proveedores</a>
+                            </li>
+                            <li>
+                                <a href="proveedores_lista">Administracion de Proveedores</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="users" width="20"></i>
                             <span>Empleados</span>
                         </a>
 
@@ -190,16 +185,37 @@ xmlns:th="http://www.thymeleaf.org">
                         </ul>
 
                     </li>
+                    <li class="sidebar-item  has-sub">
+
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="user" width="20"></i>
+                            <span>Usuarios</span>
+                        </a>
+
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="usuarios">Crear Empleado</a>
+                            </li>
+                            <li>
+                                <a href="usuarios_administracion">Administracion de Usuarios</a>
+                            </li>
+
+
+                        </ul>
+
+                    </li>
 
 
 
-             
 
 
 
 
 
-                    
+
+
 
 
                 </ul>
@@ -208,4 +224,5 @@ xmlns:th="http://www.thymeleaf.org">
         </div>
     </div>
 </body>
+
 </html>

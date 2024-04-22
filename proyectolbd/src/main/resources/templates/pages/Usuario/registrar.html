@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Voler Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body>
+
+
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Usuarios</h3>
+                    <p class="text-subtitle text-muted">Administración de Usuarios</p>
+                </div>
+                <section class="section"> <!--Seccion dinamica-->
+
+                        <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
+                            <p class="h4 m-3 text-center">Crear Empleado</p>
+                            <form th:action="@{usuarios_crear}" th:object="${usuario}" method="post">
+                                <div class="row">
+                            
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="last-name-column">Email</label>
+                                            <input type="email" id="last-name-column" th:field="*{email}" class="form-control"  name="lname-column">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="username-column">Username</label>
+                                            <input type="text" id="username-column" th:field="*{username}" class="form-control" name="username-column">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="country-floating">Contraseña</label>
+                                            <input type="text" th:field="*{password}" id="country-floating" class="form-control" name="country-floating">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="company-column">Role</label>
+                                            <select class="selectUser form-control w-85"  required th:field="*{role}"
+                                            aria-label="Default select example" id="selectUser">
+                                            <option value="ADMIN">ADMINISTRADOR</option>
+                                            <option value="USER">USUARIO</option>
+        
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        <div class="form-group">
+                                            <label for="email-id-column">Activo</label>
+                                            <input type="checkbox" id="enable" class="" name="enable" th:field="*{activo}">
+                                        </div>
+                                    </div>
+                                </diV>
+        
+                                      
+                                <div class="clearfix">
+                                    <button type="submit" class="btn btn-primary float-end">Crear Usuario</button>
+                                </div>
+                            </form>
+                        </div>
+
+                      
+
+                    </div>
+
+
+
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    
+    <script th:src="@{/js/main.js}"></script>
+</body>
+
+</html>

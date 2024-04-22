@@ -26,13 +26,13 @@
             <div class="main-content container-fluid" th:fragment="contenido">
                 <!--layout:fragment="content"Dinamic Content-->
                 <div class="page-title">
-                    <h3>Reporte de Ventas</h3>
-                    <p class="text-subtitle text-muted">Ventas por rango de mes</p>
+                    <h3>Reporte de Pedidos a Proveedores</h3>
+                    <p class="text-subtitle text-muted">Pedidos por rango de mes</p>
                 </div>
                 <section class="section">
                     <div class="row">
                         <div class="col-12">
-                            <form th:action="@{/obtener_ventas_rango}" th:object="${fechasForm}" method="post">
+                            <form th:action="@{/orden/obtener_pedidos_reportes}" th:object="${fechasForm}" method="post">
                                 <label for="fechaInicio">Fecha de Inicio:</label>
                                 <input class="form-control" type="date" id="fechaInicio" th:field="*{fechaInicio}"
                                     required><br>
@@ -41,16 +41,17 @@
                                 <input class="form-control" type="date" id="fechaFin" th:field="*{fechaFin}"
                                     required><br>
 
-                                <button class="btn btn-primary" type="submit">Buscar Ventas</button>
+                                <button class="btn btn-primary" type="submit">Buscar Pedidos</button>
                             </form>
                         </div>
                         <div class="col-12 mt-4">
-                            <table class=" mt-4 display" id="tablaVentas">
+                            <table class=" mt-4 display" id="tablaOrdenes">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Id Venta</th>
-                                        <th scope="col">Fecha Venta</th>
-                                        <th scope="col">Monto Total Venta</th>
+                                        <th scope="col">Id Ordenes</th>
+                                        <th scope="col">Detalles</th>
+                                        <th scope="col">Fecha Pedido</th>
+                                        <th scope="col">Fecha Estimada Pedido</th>
 
 
 
@@ -59,10 +60,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="venta : ${ventas}">
-                                        <td th:text="${venta['idVenta']}"></td>
-                                        <td th:text="${venta['fechaVenta']}"></td>
-                                        <td th:text="${venta['totalVenta']}"></td>
+                                    <tr th:each="pedido : ${pedidos}">
+                                        <td th:text="${pedido['idOrdenProveedor']}"></td>
+                                        <td th:text="${pedido['detalles']}"></td>
+                                        <td th:text="${pedido['fechaPedido']}"></td>
+                                        <td th:text="${pedido['fechaEstimadaFin']}"></td>
+
 
                                     </tr>
                                 </tbody>
@@ -90,7 +93,7 @@
     <script>
         $(document).ready(function () {
             console.log('hola')
-            $('#tablaVentas').DataTable();
+            $('#tablaOrdenes').DataTable();
         }
         )
     </script>

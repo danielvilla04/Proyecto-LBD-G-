@@ -21,7 +21,7 @@ public class ServiceMetodoPago {
     private JdbcTemplate jdbc;
 
     public void insertarMetodoPago(String nombre, String detalles){
-        jdbc.update("CALL INSERTAR_METODOPAGO( ?, ?)", nombre,detalles);
+        jdbc.update("CALL facturacion.INSERTAR_METODOPAGO( ?, ?)", nombre,detalles);
     }
 
     public List<Map<String, Object>> obtenerVistaMetodosPago() {
@@ -30,7 +30,7 @@ public class ServiceMetodoPago {
     }
     
     public void eliminarMetodoPago(int id) {
-        jdbc.update("CALL ELIMINAR_METODOPAGO(?)", id);
+        jdbc.update("CALL facturacion.ELIMINAR_METODOPAGO(?)", id);
     }
 
     public List<MetodoPago> obtenerMetodosPago() {

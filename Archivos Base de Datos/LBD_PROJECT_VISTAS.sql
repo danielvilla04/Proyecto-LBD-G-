@@ -1,6 +1,7 @@
 -- Archivo para crear las VISTAS que trajarán dentro de la DB
-
+---------------------------------------------------------------------------------------
 --Vistas de Empleados
+---------------------------------------------------------------------------------------
 CREATE OR REPLACE VIEW v_empleados_lista AS
 SELECT 
     E.ID_EMPLEADO,
@@ -18,7 +19,18 @@ FROM
     EMPLEADO_TB E
 INNER JOIN PUESTO_TB P ON P.ID_PUESTO = E.ID_PUESTO;
 
+
+------------------------------------------------------------------------------------------------------------------
+--  Vistas de empleados
+------------------------------------------------------------------------------------------------------------------
+CREATE VIEW v_empleado_id AS
+SELECT id_empleado, nombre_empleado
+FROM EMPLEADO_TB;
+select * from v_empleado_id
+---------------------------------------------------------------------------------------
 --Vistas de puestos
+---------------------------------------------------------------------------------------
+
 CREATE OR REPLACE VIEW v_puestos_id AS
 SELECT 
     ID_PUESTO,
@@ -27,7 +39,10 @@ FROM
     puesto_tb ;
 SELECT * FROM v_puestos_id;
 
+
+---------------------------------------------------------------------------------------
 --Vista de pedidos de proveedores
+---------------------------------------------------------------------------------------
 CREATE OR REPLACE VIEW v_pedidos_proveedores AS
 SELECT 
     PR.NOMBRE_EMPRESA AS NOMBRE_PROVEEDOR,
@@ -47,7 +62,15 @@ GROUP BY
 
 SELECT * FROM v_pedidos_proveedores;
 
+
+CREATE OR REPLACE VIEW v_proveedores_lista AS
+SELECT id_factura, id_cliente, id_empleado, id_metodo_pago, fecha_facturacion, total
+FROM factura_tb;
+
+
+---------------------------------------------------------------------------------------
 ----------------------Vistas para el apartado de facturacion
+---------------------------------------------------------------------------------------
 --vista de tabla facturas
 CREATE OR REPLACE VIEW v_facturas AS
 SELECT id_factura, id_cliente, id_empleado, id_metodo_pago, fecha_facturacion, total
@@ -85,7 +108,23 @@ SELECT
 FROM 
     PEDIDO_CLIENTE_TB;
     
+    
+CREATE OR REPLACE VIEW vista_facturas AS
+SELECT F.ID_FACTURA, C.NOMBRE_CLIENTE, E.NOMBRE_EMPLEADO, MP.NOMBRE_METODO_PAGO, F.ESTADO, F.FECHA_FACTURACION,F.TOTAL
+FROM FACTURA_TB F
+INNER JOIN CLIENTE_TB C ON C.ID_CLIENTE = F.ID_CLIENTE
+INNER JOIN EMPLEADO_TB E ON E.ID_EMPLEADO = F.ID_EMPLEADO
+INNER JOIN METODO_PAGO_TB MP ON MP.ID_METODO_PAGO = F.ID_METODO_PAGO
+
+CREATE OR REPLACE VIEW v_factura_id AS
+SELECT ID_FACTURA,ESTADO, FECHA_FACTURACION
+FROM FACTURA_TB 
+
+    
+SELECT * FROM v_factura_id 
+---------------------------------------------------------------------------------------
 --VSITA VENTAS
+---------------------------------------------------------------------------------------
 CREATE OR REPLACE VIEW VISTA_VENTAS AS
 SELECT  
     ID_VENTA idVenta,
@@ -96,7 +135,11 @@ FROM
     HISTORIAL_VENTAS;
 SELECT * FROM VISTA_VENTAS;
 
+
+---------------------------------------------------------------------------------------
 ------------------------ Vistas  de los pedidos de clientes
+---------------------------------------------------------------------------------------
+
 CREATE OR REPLACE VIEW RESUMEN_PEDIDOS_CLIENTES AS
 SELECT ID_CLIENTE, COUNT(ID_PEDIDO_CLIENTE) AS TOTAL_PEDIDOS, MAX(ESTADO_PEDIDO) AS ESTADO_ACTUAL
 FROM PEDIDO_CLIENTE_TB
@@ -123,10 +166,48 @@ SELECT ID_CLIENTE, COUNT(ID_PEDIDO_CLIENTE) AS TOTAL_PEDIDOS
 FROM PEDIDO_CLIENTE_TB
 GROUP BY ID_CLIENTE;
 
+/* ============= Vista de pedidos de clientes en proceso ============= */
+-- Pedido_Cliente
+
+CREATE VIEW VISTA_PEDIDOS_EN_PROCESO AS
+SELECT *
+FROM PEDIDO_CLIENTE_TB
+WHERE ESTADO_PEDIDO = 'En proceso';
+
+-- Ver vista
+SELECT * FROM VISTA_PEDIDOS_EN_PROCESO;
 
 
+/* ============= Vista de pedidos de clientes entregados ============= */
+CREATE VIEW VISTA_PEDIDOS_ENTREGADOS AS
+SELECT *
+FROM PEDIDO_CLIENTE_TB
+WHERE ESTADO_PEDIDO = 'Entregado';
+
+-- Ver vista
+SELECT * FROM VISTA_PEDIDOS_EN_PROCESO;
+
+
+/* ============= Vista de pedidos de clientes en espera ============= */
+CREATE VIEW VISTA_PEDIDOS_EN_ESPERA AS
+SELECT *
+FROM PEDIDO_CLIENTE_TB
+WHERE ESTADO_PEDIDO = 'En espera';
+
+-- Ver vista
+SELECT * FROM v_pedidos_empleados_lista;
+
+
+CREATE OR REPLACE VIEW v_pedidos_empleados_lista AS
+SELECT P.id_pedido_cliente,P.id_factura, P.direccion, C.NOMBRE_CLIENTE, P.ESTADO_PEDIDO
+FROM PEDIDO_CLIENTE_TB P
+INNER JOIN CLIENTE_TB C ON C.ID_CLIENTE = P.ID_CLIENTE
+
+
+
+---------------------------------------------------------------------------------------
 --vistas para productos
-
+---------------------------------------------------------------------------------------
 
 ------Vista para mostrar los productos disponibles
 
@@ -143,8 +224,9 @@ WHERE ACTIVO = 1;
 
 
 
-
+---------------------------------------------------------------------------------------
 ----------------------------------Vistas para Categorias-----
+---------------------------------------------------------------------------------------
 
 ---Vista de productos con su categor?a---
 CREATE OR REPLACE VIEW v_productos_con_categoria AS
@@ -180,9 +262,9 @@ FROM PRODUCTO_TB;
 select * from v_producto_id
 
 
-
+---------------------------------------------------------------------------------------
 --------------------------------Vistas para Inventario-----
-
+---------------------------------------------------------------------------------------
 ----Productos disponibles en el inventario---
 CREATE OR REPLACE VIEW v_productos_disponibles AS
 SELECT p.ID_PRODUCTO, p.NOMBRE_PRODUCTO, p.DESCRIPCION_PRODUCTO, p.PRECIO, i.CANTIDAD_PRODUCTO
@@ -229,8 +311,9 @@ JOIN PRODUCTO_TB P ON I.ID_PRODUCTO = P.ID_PRODUCTO;
 
 
 
-
+---------------------------------------------------------------------------------------
 /* ============= Vista de todos los proveedores ============= */
+---------------------------------------------------------------------------------------
 -- Vistas Gestion_Provedores
 
 CREATE VIEW VISTA_PROVEEDORES AS
@@ -267,43 +350,14 @@ SELECT * FROM VISTA_PROVEEDORES_COMIENZAN_CON_P;
 
 
 
-/* ------------------------------------------------------------------------------------------------------------------ */
-/* ============= Vista de pedidos de clientes en proceso ============= */
--- Pedido_Cliente
 
-CREATE VIEW VISTA_PEDIDOS_EN_PROCESO AS
-SELECT *
-FROM PEDIDO_CLIENTE_TB
-WHERE ESTADO_PEDIDO = 'En proceso';
-
--- Ver vista
-SELECT * FROM VISTA_PEDIDOS_EN_PROCESO;
-
-
-/* ============= Vista de pedidos de clientes entregados ============= */
-CREATE VIEW VISTA_PEDIDOS_ENTREGADOS AS
-SELECT *
-FROM PEDIDO_CLIENTE_TB
-WHERE ESTADO_PEDIDO = 'Entregado';
-
--- Ver vista
-SELECT * FROM VISTA_PEDIDOS_EN_PROCESO;
-
-
-/* ============= Vista de pedidos de clientes en espera ============= */
-CREATE VIEW VISTA_PEDIDOS_EN_ESPERA AS
-SELECT *
-FROM PEDIDO_CLIENTE_TB
-WHERE ESTADO_PEDIDO = 'En espera';
-
--- Ver vista
-SELECT * FROM VISTA_PEDIDOS_EN_ESPERA;
 
 
 
 
 /* ------------------------------------------------------------------------------------------------------------------ */
 -- Vistas Gestion_Cliente
+------------------------------------------------------------------------------------------------------------------
 /* ============= Vista de clientes masculinos ============= */
 CREATE VIEW VISTA_CLIENTES_MASCULINOS AS
 SELECT *
@@ -343,9 +397,10 @@ select * from v_cliente_id
 
 
 
-
---  Vistas de empleados
-CREATE VIEW v_empleado_id AS
-SELECT id_empleado, nombre_empleado
-FROM EMPLEADO_TB;
-select * from v_empleado_id
+------------------------------------------------------------------------------------------------------------------
+--Vista de usuarios
+------------------------------------------------------------------------------------------------------------------
+CREATE OR REPLACE VIEW v_usuarios_lista AS
+SELECT id_usuario, username NOMBRE, ROLE ROL
+FROM USUARIOS
+select * from v_usuarios_lista

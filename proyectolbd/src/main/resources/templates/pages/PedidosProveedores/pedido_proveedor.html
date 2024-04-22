@@ -28,7 +28,7 @@
                     </div>
 
                     <section class="content container-fluid">
-                        <form th:action="@{/orden/crear_orden}" th:object="${orden}" method="post">
+                        <form th:action="@{/orden/crear_orden}" th:object="${orden}" method="post"> 
                             <div class="form-group">
                                 <label for="detalles">Proveedor:</label>
                                 <select class="selectProveedor form-control w-85" th:field="*{idProveedor}" required

@@ -9,10 +9,10 @@ import com.proyectolbd.proyectolbd.modelo.ventas.DetalleOrdenProveedor;
 public class OrdenProveedor {
     
 
-    private Long idOrdenProveedor;
+    private int idOrdenProveedor;
     
 
-    private Long idProveedor;
+    private int idProveedor;
     
     private String detalles;
 
@@ -25,7 +25,7 @@ public class OrdenProveedor {
     public OrdenProveedor() {
     }
 
-    public OrdenProveedor(Long idOrdenProveedor, Long idProveedor, String detalles, Date fechaPedido,
+    public OrdenProveedor(int idOrdenProveedor, int idProveedor, String detalles, Date fechaPedido,
             Date fechaEstimadaFin, List<DetalleOrdenProveedor> detalles_prov) {
         this.idOrdenProveedor = idOrdenProveedor;
         this.idProveedor = idProveedor;
@@ -35,19 +35,19 @@ public class OrdenProveedor {
         this.detalles_prov = detalles_prov;
     }
 
-    public Long getIdOrdenProveedor() {
+    public int getIdOrdenProveedor() {
         return idOrdenProveedor;
     }
 
-    public void setIdOrdenProveedor(Long idOrdenProveedor) {
+    public void setIdOrdenProveedor(int idOrdenProveedor) {
         this.idOrdenProveedor = idOrdenProveedor;
     }
 
-    public Long getIdProveedor() {
+    public int getIdProveedor() {
         return idProveedor;
     }
 
-    public void setIdProveedor(Long idProveedor) {
+    public void setIdProveedor(int idProveedor) {
         this.idProveedor = idProveedor;
     }
 

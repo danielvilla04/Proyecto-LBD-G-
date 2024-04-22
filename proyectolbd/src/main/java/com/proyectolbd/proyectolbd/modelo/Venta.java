@@ -7,14 +7,14 @@ public class Venta {
     private int idVenta;
     private int idFactura;
     private Date fechaVenta;
-    private int totalVenta;
+    private double totalVenta;
 
 
     public Venta() {
     }
 
 
-    public Venta(int idVenta, int idFactura, Date fechaVenta, int totalVenta) {
+    public Venta(int idVenta, int idFactura, Date fechaVenta, double totalVenta) {
         this.idVenta = idVenta;
         this.idFactura = idFactura;
         this.fechaVenta = fechaVenta;
@@ -52,13 +52,13 @@ public class Venta {
     }
 
 
-    public int getTotalVenta() {
+    public double getTotalVenta() {
         return totalVenta;
     }
 
 
-    public void setTotalVenta(int totalVenta) {
-        this.totalVenta = totalVenta;
+    public void setTotalVenta(double d) {
+        this.totalVenta = d;
     }
 
     

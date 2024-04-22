@@ -40,6 +40,9 @@ CREATE OR REPLACE PACKAGE facturacion AS
         id_producto DETALLE_FACTURA_TB.ID_PRODUCTO%TYPE,
         cantidad_producto DETALLE_FACTURA_TB.CANTIDAD_PRODUCTOS%TYPE,
         precio_fila DETALLE_FACTURA_TB.PRECIO_FILA%TYPE);  
+    
+    PROCEDURE CAMBIAR_ESTADO_FACTURA(
+    p_id_factura FACTURA_TB.ID_FACTURA%TYPE);
         
    
 
@@ -201,7 +204,7 @@ CREATE OR REPLACE PACKAGE BODY facturacion AS
             return v_id_factura;
     
 
-    END INSERTAR_FACTURA;
+    END ;
     
 
 
@@ -254,29 +257,42 @@ CREATE OR REPLACE PACKAGE BODY facturacion AS
     
     
     END;
+    
+    PROCEDURE CAMBIAR_ESTADO_FACTURA (
+       p_id_factura FACTURA_TB.ID_FACTURA%TYPE
+    )
+    IS
+        v_estado_actual VARCHAR2(20);
+    BEGIN
+        -- Obtener el estado actual de la factura
+        SELECT ESTADO INTO v_estado_actual
+        FROM FACTURA_TB
+        WHERE ID_FACTURA = p_id_factura;
+    
+        -- Verificar si el estado actual es diferente al nuevo estado
+        IF v_estado_actual = 'Cancelada' THEN
+            -- Actualizar el estado de la factura
+            UPDATE FACTURA_TB
+            SET ESTADO = 'Pendiente'
+            WHERE ID_FACTURA = p_id_factura;
+    
+            -- Mostrar mensaje de éxito
+      
+        ELSE
+            UPDATE FACTURA_TB
+                SET ESTADO = 'Cancelada'
+                WHERE ID_FACTURA = p_id_factura;
+      
+        END IF;
+    END CAMBIAR_ESTADO_FACTURA;
 
    
     
 END facturacion;
 
 DECLARE
-    id_cliente_factura NUMBER := 5000; 
-    id_empleado_factura NUMBER := 9000; 
-    id_metodo_pago_factura NUMBER := 1;
-    detalles_factura VARCHAR2(100) := 'Detalles de la factura';
-    estado_factura VARCHAR2(20) := 'Pendiente'; 
-    fecha_facturacion_factura DATE := SYSDATE;
-    total_factura NUMBER := 100.00;
-    id_factura_generado NUMBER;
+    id_factura NUMBER := 45; 
+
 BEGIN
-    id_factura_generado := facturacion.INSERTAR_FACTURA(
-        id_cliente => id_cliente_factura,
-        id_empleado => id_empleado_factura,
-        id_metodo => id_metodo_pago_factura,
-        detalles => detalles_factura,
-        estado => estado_factura,
-        fecha_facturacion => fecha_facturacion_factura,
-        total => total_factura
-    );
-    DBMS_OUTPUT.PUT_LINE('ID de la factura generada: ' || id_factura_generado);
+    FACTURACION.CAMBIAR_ESTADO_FACTURA(id_factura);
 END;

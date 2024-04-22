@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.proyectolbd.proyectolbd.modelo.FechasForm;
 import com.proyectolbd.proyectolbd.modelo.OrdenProveedor;
 import com.proyectolbd.proyectolbd.modelo.Orden_DetallesProveedor;
 import com.proyectolbd.proyectolbd.modelo.ProductoTb;
@@ -70,6 +72,14 @@ public class OrdenProveedorController {
         Map<String, Object> response = new HashMap<>();
         response.put("data", ventas); // Coloca los datos dentro de una clave "data"
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/obtener_pedidos_reportes")
+    public String obtenerPedidosRango(@ModelAttribute FechasForm fechas , Model model ) {
+            System.out.println("fdslfsdfjdslfhd"+ fechas.getFechaFin());
+           List<OrdenProveedor> ordenes = ordenProveedorService.obtenerOrdenesPorRango(fechas.getFechaInicio(), fechas.getFechaFin());
+           model.addAttribute("pedidos", ordenes);
+           return "pages/PedidosProveedores/reportes_pedidos"; // Esto es el nombre de la vista Thymeleaf
     }
 
 }
