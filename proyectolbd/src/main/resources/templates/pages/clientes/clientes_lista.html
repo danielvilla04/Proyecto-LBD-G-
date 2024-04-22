@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
+    <title>Cliente</title>
+</head>
+
+<body>
+
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+              
+                <section class="section">
+                    <div class="container-fluid">
+                        <div class="row my-3">
+                           
+                            <div class="col-12 py-3">
+                                <table class="table" id="tablaCliente">
+                                    <thead>
+                                       
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tablaCliente').DataTable({
+                "ajax": {
+                    "type" : "GET",
+                    "url": "/listaClientes",
+                    "success": function(data){
+                        console.log(data);
+                    },
+                    "error": function(data){
+                        console.log(data);
+                 
+                    }
+                }, //getClientes
+                "columns": [
+                    { title: "ID", data: "id_cliente" },
+                    { title: "Nombre", data: "nombre" },
+                    { title: "Primer Apellido", data: "primer_Apellido" },
+                    { title: "Segundo Apellido", data: "segundo_Apellido" },
+                    { title: "Cedula", data: "cedula" },
+                    { title: "Edad", data: "edad" },
+                    { title: "Genero", data: "genero" },
+                    { title: "ID Direccion", data: "id_direccion" }
+                    
+                ]
+            });
+
+
+ 
+            // Manejar el clic del botón
+            //$("#actualizarBtn").click(function () {
+            //    // Realizar la solicitud POST al controlador
+            //    $.ajax({
+            //        url: '/actualizar_pedido_clientes',
+            //        type: 'POST',
+            //        success: function (response) {
+            //            $('#tablaPedidos').DataTable().ajax.reload();
+            //            console.log("La solicitud POST se realizó con éxito");
+            //        },
+            //        error: function (xhr, status, error) {
+            //            console.error("Error al realizar la solicitud POST:", error);
+            //        }
+            //    });
+            //});
+
+        // Manejar el clic del botón eliminar
+        $('#tablaPedidos').on('click', '.eliminar-btn', function () {
+            var idPedido = $(this).data('id');
+            eliminarPedido(idPedido);
+        });
+
+        // Función para eliminar un pedido de cliente
+        function eliminarPedido(idPedido) {
+            $.ajax({
+                type: 'POST',
+                url: '/eliminar_pedido_clientes/' + idPedido,
+                success: function (response) {
+                    $('#tablaPedidos').DataTable().ajax.reload();
+                    console.log("Pedido de cliente eliminado con éxito");
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error al eliminar el pedido de cliente:", error);
+                }
+            });
+        }
+    });
+
+
+    </script>
+
+</body>
+
+</html>
