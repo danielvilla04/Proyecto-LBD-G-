@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario Disponible</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app"><!--Main Content-->
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main"><!--Content-->
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <!--layout:fragment="content"Dinamic Content-->
+                <div class="page-title">
+                    <h3>Inventario</h3>
+                    <p class="text-subtitle text-muted">Administración de Inventario</p>
+                </div>
+                <section class="section"> <!--Seccion dinamica-->
+                    <div class="row my-3">
+                        <div class="col-12" style="overflow: scroll;"><!--Tabla de inventario-->
+                          <table class="display" id="tablaInventario">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">ID Producto</th>
+                                        <th scope="col">Cantidad</th>
+                                        <th scope="col">Fecha Actualización</th>
+                                        <th scope="col">Disponible</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="inventario : ${inventarios}">
+                                        <td th:text="${inventario['ID_INVENTARIO']}"></td>
+                                        <td th:text="${inventario['NOMBRE_PRODUCTO']}"></td>
+                                        <td th:text="${inventario['CANTIDAD_PRODUCTO']}"></td>
+                                        <td th:text="${inventario['FECHA_ACTUALIZACION']}"></td>
+                                        <td th:text="${inventario['DISPONIBLE']}"></td>
+                                        <td>
+                                            <button class="btn btn-danger delete-btn"
+                                                th:onclick="'eliminar(\'' + ${inventario['ID_INVENTARIO']} + '\')'">
+                                                Eliminar</button>
+                                            <button class="btn btn-success update-btn" onclick="actualizarInventario('${inventario.idInventario}')">
+                                                Actualizar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>  
+                        </div>
+                        <div class="col-12"> <!--Formulario de agregar nuevo elemento al inventario-->
+                            <p class="h4 m-3 text-center">Agregar Nuevo Elemento</p>
+                            <form method="post" action="/inventario/agregar" enctype="application/json"
+                                id="inventarioForm">
+                                <div class="mb-3">
+                                    <label for="idProducto" class="form-label">ID Producto:</label>
+                                    <input type="number" class="form-control" id="idProducto" name="idProducto" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cantidadProducto" class="form-label">Cantidad:</label>
+                                    <input type="number" class="form-control" id="cantidadProducto" name="cantidadProducto"
+                                        required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fechaActualizacion" class="form-label">Fecha Actualización:</label>
+                                    <input type="date" class="form-control" id="fechaActualizacion"
+                                        name="fechaActualizacion" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="disponible" class="form-label">Disponible:</label>
+                                    <input type="number" class="form-control" id="disponible" name="disponible" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Agregar</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        function eliminarInventario(idInventario) {
+            if (confirm("¿Estás seguro de que deseas eliminar este elemento del inventario?")) {
+                $.ajax({
+                    url: '/inventario/eliminar/' + idInventario,
+                    type: 'DELETE',
+                    success: function(result) {
+                        alert("Elemento del inventario eliminado con éxito");
+                        window.location.reload();
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error al eliminar el elemento del inventario");
+                    }
+                });
+            }
+        }
+
+        function actualizarInventario(idInventario) {
+            // Aquí puedes redirigir a una página de actualización del inventario con el ID correspondiente
+            alert("Redirigiendo a la página de actualización del inventario con ID: " + idInventario);
+        }
+
+        $(document).ready(function () {
+            $('#tablaInventario').DataTable();
+        });
+    </script>
+</body>
+
+</html>

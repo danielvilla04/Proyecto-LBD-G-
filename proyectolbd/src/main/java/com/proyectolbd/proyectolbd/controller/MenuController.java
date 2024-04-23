@@ -14,18 +14,23 @@ import java.util.LinkedList;
 
 import java.util.Map;
 
+import com.proyectolbd.proyectolbd.modelo.Cliente;
 import com.proyectolbd.proyectolbd.modelo.Empleado;
 import com.proyectolbd.proyectolbd.modelo.Factura;
 import com.proyectolbd.proyectolbd.modelo.FechasForm;
 import com.proyectolbd.proyectolbd.modelo.OrdenProveedor;
 import com.proyectolbd.proyectolbd.modelo.PedidoCliente;
+import com.proyectolbd.proyectolbd.modelo.ProductoTb;
+import com.proyectolbd.proyectolbd.modelo.ProveedorTb;
 import com.proyectolbd.proyectolbd.modelo.Usuario;
 import com.proyectolbd.proyectolbd.modelo.Venta;
 import com.proyectolbd.proyectolbd.modelo.ventas.DetalleFactura;
 import com.proyectolbd.proyectolbd.modelo.ventas.DetalleOrdenProveedor;
 import com.proyectolbd.proyectolbd.servicio.EmpleadoService;
 import com.proyectolbd.proyectolbd.servicio.FacturaService;
+import com.proyectolbd.proyectolbd.servicio.InventarioService;
 import com.proyectolbd.proyectolbd.servicio.PedidoClienteService;
+import com.proyectolbd.proyectolbd.servicio.ProductoTbService;
 import com.proyectolbd.proyectolbd.servicio.ProveedorService;
 import com.proyectolbd.proyectolbd.servicio.ServiceMetodoPago;
 import com.proyectolbd.proyectolbd.servicio.UsuarioService;
@@ -50,6 +55,12 @@ public class MenuController {
 
    @Autowired
    private ProveedorService proveedorService;
+
+   @Autowired
+   private ProductoTbService producto;
+
+   @Autowired
+   private InventarioService inventarioService;
 
    // Controler para los links del menu
    // Links de ventas
@@ -114,11 +125,26 @@ public class MenuController {
       return "/pages/PedidosClientes/pedidos_gestion_lista";
    }
 
+   @GetMapping("/clientes_lista")
+   public String mostrarClientesLista(Model model) {
+      model.addAttribute("cliente", new Cliente());
+      return "/pages/clientes/clientes_lista";
+   }
+
+   @GetMapping("/clientes")
+   public String mostrarClientes(Model model) {
+      model.addAttribute("cliente", new Cliente());
+      return "/pages/clientes/clientes_p";
+   }
+
+
+
    //// Links de Proveedores
 
    @GetMapping("/proveedores")
-   public String mostrarProveedores() {
-
+   public String mostrarProveedores(Model model) {
+      ProveedorTb proveedor = new ProveedorTb();
+      model.addAttribute("proveedor", proveedor);
       return "/pages/Proveedor/proveedor";
    }
 
@@ -179,6 +205,24 @@ public class MenuController {
       List<Map<String, Object>> usuarios = usuario.obtenerVistaUsuarios();
       model.addAttribute("usuarios", usuarios);
       return "/pages/Usuario/usuarios_administracion";
+   }
+
+   @GetMapping("/productos")
+
+   public String mostrarProductos(Model model) {
+      List<Map<String, Object>> productos = producto.obtenerVistaProductos();
+      model.addAttribute("productos", productos);
+
+      return "/pages/Productos/productos";
+   }
+   
+   
+      @GetMapping("/inventario")
+
+   public String mostrarInventario(Model model) {
+      List<Map<String, Object>> inventarios = inventarioService.obtenerVistaInventario();
+      model.addAttribute("inventarios", inventarios);
+      return "/pages/Inventario/inventario";
    }
 
 }

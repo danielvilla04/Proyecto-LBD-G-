@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div id="app">
+        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div id="main">
+            <nav th:replace="fragments/header :: header"></nav>
+            <div class="main-content container-fluid" th:fragment="contenido">
+                <div class="page-title">
+                    <h3>Productos</h3>
+                    <p class="text-subtitle text-muted">Administración de Productos</p>
+                </div>
+                <section class="section">
+                    <div class="row my-3">
+                        <div class="col-12" style="overflow: scroll;">
+                            <table class="display" id="tablaProductos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">ID Producto</th>
+                                        <th scope="col">Nombre Producto</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Precio</th>
+                                        <th scope="col">ID Categoría</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="producto : ${productos}">
+                                        <td th:text="${producto['ID_PRODUCTO']}"></td>
+                                        <td th:text="${producto['ID_PRODUCTO']}"></td>
+                                        <td th:text="${producto['ID_PRODUCTO']}"></td>
+                                        <td th:text="${producto['ID_PRODUCTO']}"></td>
+                                        <td th:text="${producto['ID_PRODUCTO']}"></td>
+                                        <td>
+                                            <button class="btn btn-danger delete-btn" onclick="eliminarProducto('${producto.idProducto}')">
+                                                Eliminar
+                                            </button>
+                                            <button class="btn btn-success update-btn" onclick="actualizarProducto('${producto.idProducto}')">
+                                                Actualizar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-12">
+                            <h4>Agregar Nuevo Producto</h4>
+                            <form id="formulario-producto">
+                                <div class="mb-3">
+                                    <label for="idProducto" class="form-label">ID Producto</label>
+                                    <input type="number" class="form-control" id="idProducto" name="idProducto">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nombreProducto" class="form-label">Nombre Producto</label>
+                                    <input type="text" class="form-control" id="nombreProducto" name="nombreProducto">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="descripcionProducto" class="form-label">Descripción</label>
+                                    <textarea class="form-control" id="descripcionProducto" name="descripcionProducto"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="precio" class="form-label">Precio</label>
+                                    <input type="number" class="form-control" id="precio" name="precio">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="idCategoria" class="form-label">ID Categoría</label>
+                                    <input type="number" class="form-control" id="idCategoria" name="idCategoria">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="agregarProducto()">Agregar Producto</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <footer th:replace="fragments/footer :: footer"></footer>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        function eliminarProducto(idProducto) {
+            if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+                $.ajax({
+                    url: '/productos/eliminar/' + idProducto,
+                    type: 'DELETE',
+                    success: function(result) {
+                        alert("Producto eliminado con éxito");
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        alert("Error al eliminar el producto");
+                    }
+                });
+            }
+        }
+
+        function actualizarProducto(idProducto) {
+           
+            alert("Redirigiendo a la página de actualización del producto con ID: " + idProducto);
+        }
+
+        function agregarProducto() {
+            var formData = $('#formulario-producto').serialize();
+            $.ajax({
+                url: '/productos/insertar',
+                type: 'POST',
+                data: formData,
+                success: function(result) {
+                    alert("Producto agregado con éxito");
+                   
+                },
+                error: function(xhr, status, error) {
+                    alert("Error al agregar el producto");
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#tablaProductos').DataTable();
+        });
+    </script>
+</body>
+
+</html>

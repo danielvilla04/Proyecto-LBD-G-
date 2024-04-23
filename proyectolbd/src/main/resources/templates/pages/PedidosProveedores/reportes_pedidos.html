@@ -32,7 +32,7 @@
                 <section class="section">
                     <div class="row">
                         <div class="col-12">
-                            <form th:action="@{/orden/obtener_pedidos_reportes}" th:object="${fechasForm}" method="post">
+                            <form th:action="@{/obtener_pedidos_reportes}" th:object="${fechasForm}" method="post">
                                 <label for="fechaInicio">Fecha de Inicio:</label>
                                 <input class="form-control" type="date" id="fechaInicio" th:field="*{fechaInicio}"
                                     required><br>

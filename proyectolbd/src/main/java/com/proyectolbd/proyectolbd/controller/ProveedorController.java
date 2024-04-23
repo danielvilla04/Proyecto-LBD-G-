@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,18 @@ public class ProveedorController {
         ProveedorTb proveedorM = proveedor.obtenerProveedorPorId(id);
         model.addAttribute("proveedor", proveedorM);
         return "pages/Proveedor/proveedor_actualizar"; // Nombre de la página HTML para el formulario de actualización
+    }
+
+    @PostMapping("/actualizar_proveedor")
+    public String actualizarProveedor(@ModelAttribute ProveedorTb proveedorM) {
+        proveedor.actualizarProveedor(proveedorM);
+        return "/pages/Proveedor/proveedor_lista";
+    }
+
+    @PostMapping("/proveedor_insertar")
+    public String crear_Proveedor(@ModelAttribute ProveedorTb proveedorM) {
+        proveedor.crearProveedor(proveedorM);
+        return "redirect:proveedor";
     }
     
 }

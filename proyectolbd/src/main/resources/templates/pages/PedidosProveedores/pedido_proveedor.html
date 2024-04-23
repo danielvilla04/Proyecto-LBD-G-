@@ -23,12 +23,12 @@
                 <div class="main-content container-fluid" th:fragment="contenido">
                     <!--layout:fragment="content"Dinamic Content-->
                     <div class="page-title">
-                        <h3>Pedidos Clientes</h3>
+                        <h3>Pedidos Proveedores</h3>
                         <p class="text-subtitle text-muted">Crear nuevo pedido</p>
                     </div>
 
                     <section class="content container-fluid">
-                        <form th:action="@{/orden/crear_orden}" th:object="${orden}" method="post"> 
+                        <form th:action="@{/crear_orden}" th:object="${orden}" method="post"> 
                             <div class="form-group">
                                 <label for="detalles">Proveedor:</label>
                                 <select class="selectProveedor form-control w-85" th:field="*{idProveedor}" required
@@ -102,7 +102,7 @@
 
 
 
-            $.get("/orden/obtener_productos", function (data) {
+            $.get("/obtener_productos", function (data) {
                 console.log('aqui')
                 var options = '';
                 $.each(data, function (index, producto) {
@@ -110,7 +110,7 @@
                 });
                 $('.selectProducto').append(options);
             });
-            $.get("/orden/obtener_proveedor", function (data) {
+            $.get("/obtener_proveedor", function (data) {
                 console.log('aqui')
                 var options = '';
                 $.each(data, function (index, proveedor) {

@@ -34,7 +34,7 @@
 
                         <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
                             <p class="h4 m-3 text-center">Actualizar Usuario</p>
-                            <form method="post" th:action="@{/proveedor_actualizar}" th:object="${proveedor}" enctype="application/json" id="usuariosForm">
+                            <form method="post" th:action="@{/actualizar_proveedor}" th:object="${proveedor}" enctype="application/json" id="usuariosForm">
                                 <input  type="hidden" th:value="${proveedor.idProveedor}" th:field="*{idProveedor}">
                                 <div class="row">
                             
@@ -66,9 +66,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-12">
-                                        <div class="form-group">
+                                        <div class="form-group ">
                                             <label for="email-id-column">Direccion</label>
-                                            <input type="checkbox" id="enable" class="" name="enable"  th:field="*{direccion}" th:value="${proveedor.direccion}">  
+                                            <input type="text" id="enable" class="" name="enable"  th:field="*{direccion}" th:value="${proveedor.direccion}">  
                                         </div>
                                     </div>
                                 </diV>
@@ -111,13 +111,7 @@
             
 
             
-        $.get("/empleados/obtener_puestos", function(data) {
-            var options = '';
-            $.each(data, function(index, puesto) {
-                options += '<option value="' + puesto.idPuesto + '">' + puesto.nombrePuesto + '</option>';
-            });
-            $('.selectPuestos').append(options);
-        });
+      
     
         
         });

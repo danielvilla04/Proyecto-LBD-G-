@@ -32,47 +32,52 @@
                 </div>
                 <section class="section"> <!--Seccion dinamica-->
 
-                        <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
-                            <p class="h4 m-3 text-center">Añadir Proveedor</p>
-                            <form method="post" th:action="@{/proveedor_insertar}"  enctype="application/json" id="empleadosForm">
-                                
-                                <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Nombre Empresa</label>
-                                    <input type="text" class="form-control" >
+                    <div class="col-12"> <!--Fomrulario de creacion de metodoso de pago-->
+                        <p class="h4 m-3 text-center">Añadir Proveedor</p>
+                        <form method="post" th:action="@{/proveedor_insertar}" th:object="${proveedor}"
+                            enctype="application/json" id="empleadosForm">
 
-                                </div>
-                                <div class="mb-3">
-                                    <label for="" class="form-label">Persona Contacto</label>
-                                    <input type="text" class="form-control"   >
-                                </div>
-                                <div class="mb-3">
-                                    <label for="" class="form-label">Tipo de Proveedor</label>
-                                    <select class="selectPuestos form-control w-85" aria-label="Default select example"
-                                        id="puesto" name="puesto" required>
-                                        <option value="1">Seleccione el Puesto</option>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Nombre Empresa</label>
+                                <input type="text" class="form-control" th:field="*{nombreEmpresa}">
 
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="nombreMetodoPago" class="form-label">Direccion</label>
-                                    <input type="text" class="form-control" >
-                                </div>
-                                
-                                <button type="submit" class="btn btn-primary text-center"
-                                    id="btnGuardar">Guardar</button>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Persona Contacto</label>
+                                <input type="text" class="form-control" th:field="*{personaContacto}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="" class="form-label">Tipo de Proveedor</label>
+                                <select class="selectUser form-control w-85" required th:field="*{tipoProveedor}"
+                                    th:value="${proveedor.tipoProveedor}" aria-label="Default select example"
+                                    id="selectUser">
+                                    <option value="Overlanding">Overlanding</option>
+                                    <option value="OffRoad">OffRoad</option>
+                                    <option value="Repuestos">Repuestos</option>
+                                    <option value="Alógenos">Alógenos</option>
 
-                      
 
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nombreMetodoPago" class="form-label">Direccion</label>
+                                <input type="text" class="form-control" th:field="*{direccion}">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary text-center" id="btnGuardar">Guardar</button>
+                        </form>
                     </div>
 
 
 
-                </section>
             </div>
-            <footer th:replace="fragments/footer :: footer"></footer>
+
+
+
+            </section>
         </div>
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
     </div>
 
 
@@ -88,21 +93,21 @@
     <script type="text/javascript">
 
 
-    
+
 
         $(document).ready(function () {
-            
 
-            
-        $.get("/empleados/obtener_puestos", function(data) {
-            var options = '';
-            $.each(data, function(index, puesto) {
-                options += '<option value="' + puesto.idPuesto + '">' + puesto.nombrePuesto + '</option>';
+
+
+            $.get("/empleados/obtener_puestos", function (data) {
+                var options = '';
+                $.each(data, function (index, puesto) {
+                    options += '<option value="' + puesto.idPuesto + '">' + puesto.nombrePuesto + '</option>';
+                });
+                $('.selectPuestos').append(options);
             });
-            $('.selectPuestos').append(options);
-        });
-    
-        
+
+
         });
 
 
@@ -137,7 +142,7 @@
         }*/
 
 
-       
+
 
 
     </script>

@@ -43,7 +43,7 @@ public class UsuarioController {
         System.out.println("mi id es:"+id);
         Usuario usuarioM = userService.obtenerUsuarioPorId(id);
         model.addAttribute("usuario", usuarioM);
-        return "pages/Usuario/users_actualizar"; // Nombre de la página HTML para el formulario de actualización
+        return "/pages/Usuario/users_actualizar"; // Nombre de la página HTML para el formulario de actualización
     }
 
 

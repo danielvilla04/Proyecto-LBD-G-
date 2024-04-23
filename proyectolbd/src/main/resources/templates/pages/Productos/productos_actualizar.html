@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Producto</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="shortcut icon" th:href="@{/images/favicon.svg}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Actualizar Producto</h2>
+        <form method="post" action="/productos/actualizar" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="idProducto" class="form-label">ID Producto</label>
+                <input type="text" class="form-control" id="idProducto" name="idProducto" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="nombreProducto" class="form-label">Nombre Producto</label>
+                <input type="text" class="form-control" id="nombreProducto" name="nombreProducto">
+            </div>
+            <div class="mb-3">
+                <label for="descripcionProducto" class="form-label">Descripción</label>
+                <textarea class="form-control" id="descripcionProducto" name="descripcionProducto"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="precio" class="form-label">Precio</label>
+                <input type="number" class="form-control" id="precio" name="precio">
+            </div>
+            <div class="mb-3">
+                <label for="idCategoria" class="form-label">ID Categoría</label>
+                <input type="number" class="form-control" id="idCategoria" name="idCategoria">
+            </div>
+            <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

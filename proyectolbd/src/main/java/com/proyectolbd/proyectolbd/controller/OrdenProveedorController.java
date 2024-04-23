@@ -28,7 +28,6 @@ import com.proyectolbd.proyectolbd.modelo.ventas.DetalleOrdenProveedor;
 import com.proyectolbd.proyectolbd.servicio.OrdenProveedorService;
 
 @Controller
-@RequestMapping("/orden")
 public class OrdenProveedorController {
 
     @Autowired
@@ -79,7 +78,7 @@ public class OrdenProveedorController {
             System.out.println("fdslfsdfjdslfhd"+ fechas.getFechaFin());
            List<OrdenProveedor> ordenes = ordenProveedorService.obtenerOrdenesPorRango(fechas.getFechaInicio(), fechas.getFechaFin());
            model.addAttribute("pedidos", ordenes);
-           return "pages/PedidosProveedores/reportes_pedidos"; // Esto es el nombre de la vista Thymeleaf
+           return "/pages/PedidosProveedores/reportes_pedidos"; // Esto es el nombre de la vista Thymeleaf
     }
 
 }

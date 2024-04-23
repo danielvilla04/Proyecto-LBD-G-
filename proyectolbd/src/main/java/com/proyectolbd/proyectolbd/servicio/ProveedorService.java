@@ -41,5 +41,26 @@ public class ProveedorService {
             return proveedor;
         });
     }
+
+    public void actualizarProveedor(ProveedorTb proveedor) {
+        System.out.println("este es mi nombreeeeeee:    " + proveedor.getIdProveedor());
+        String query = "CALL PROVEEDOR_PKG.actualizar_proveedor(?,?,?,?, ?)";
+        jdbc.update(query,
+        proveedor.getIdProveedor(),
+        proveedor.getNombreEmpresa(),
+        proveedor.getPersonaContacto(),
+        proveedor.getTipoProveedor(),
+        proveedor.getDireccion());
+
+    }
+
+    public void crearProveedor(ProveedorTb proveedor) {
+
+        jdbc.update("CALL PROVEEDOR_PKG.insertar_proveedor(?, ?, ?, ?)", 
+        proveedor.getNombreEmpresa(),
+        proveedor.getPersonaContacto(),
+        proveedor.getTipoProveedor(),
+        proveedor.getDireccion());
+    }
     
 }
